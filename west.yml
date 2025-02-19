@@ -1,0 +1,16 @@
+manifest:
+
+  projects:
+    - name: zephyr
+      url: https://github.com/zephyrproject-rtos/zephyr
+      revision: main
+      path: zephyr
+      west-commands: scripts/west-commands.yml
+      import:
+        name-allowlist:
+          - cmsis
+
+    - name: libcsp
+      url: https://github.com/libcsp/libcsp
+      revision: develop
+      path: modules/lib/libcsp
