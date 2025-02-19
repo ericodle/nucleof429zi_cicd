@@ -1,4 +1,4 @@
-# Tests for libcsp on Zephyr RTOS
+# Tests for SOS
 
 ## How to build
 
@@ -7,8 +7,8 @@ mkdir workspace
 cd workspace
 pipenv shell
 pip3 install west
-west init -m https://github.com/spacecubics/libcsp-zephyr
+west init -m https://github.com/ericodle/nucleof429zi_cicd
 west update
 pip3 install -r zephyr/scripts/requirements-base.txt
-west build -b qemu_cortex_m3 libcsp-zephyr
+west build -b nucleo_f429zi nucleof429zi_cicd
 ```
