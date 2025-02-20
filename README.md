@@ -89,7 +89,7 @@ west build -b nucleo_f429zi app -- -DEXTRA_CONF_FILE=debug.conf
 Once you have built the application, run the following command to flash it:
 
 ```shell
-west flash
+west flash --runner openocd
 ```
 
 ### Testing
