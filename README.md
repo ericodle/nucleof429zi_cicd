@@ -61,6 +61,8 @@ the ``example-application`` and all Zephyr modules will be cloned. Run the follo
 command:
 
 ```shell
+# activate the zephyr virutal environment created during setup
+source ~/zephyrproject/.venv/bin/activate
 # initialize my-workspace for the example-application (main branch)
 west init -m https://github.com/ericodle/nucleof429zi_cicd --mr main my-workspace
 # update Zephyr modules
