@@ -3,8 +3,8 @@
 ## How to build
 
 ```
-mkdir workspace
-cd workspace
+mkdir nucleof429zi_cicd_app
+cd nucleof429zi_cicd_app
 pipenv shell
 pip3 install west
 west init -m https://github.com/ericodle/nucleof429zi_cicd
