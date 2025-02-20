@@ -60,17 +60,24 @@ The first step is to initialize the workspace folder (``my-workspace``) where
 the ``example-application`` and all Zephyr modules will be cloned. Run the following
 command:
 
+Activate the zephyr virutal environment created during setup
+
 ```shell
-# activate the zephyr virutal environment created during setup
 source ~/zephyrproject/.venv/bin/activate
-# initialize my-workspace for the example-application (main branch)
+```
+
+Initialize my-workspace for the example-application (main branch)
+```shell
 west init -m https://github.com/ericodle/nucleof429zi_cicd --mr main my-workspace
-# update Zephyr modules
 cd my-workspace
+```
+
+Update Zephyr modules
+```shell
 west update
 ```
 
-### Building and running
+### Building the app
 
 To build the application, run the following command:
 
@@ -79,7 +86,19 @@ cd nucleof429zi_cicd
 west build -b nucleo_f429zi app
 ```
 
-Once you have built the application, run the following command to flash it:
+### quick Setup
+
+```shell
+source ~/zephyrproject/.venv/bin/activate
+west init -m https://github.com/ericodle/nucleof429zi_cicd --mr main my-workspace
+cd my-workspace
+west update
+cd nucleof429zi_cicd
+west build -b nucleo_f429zi app
+```
+### Running
+
+Once you have built the application, run the following command to flash it to your board:
 
 ```shell
 west flash --runner openocd
