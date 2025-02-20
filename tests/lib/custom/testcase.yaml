@@ -2,7 +2,7 @@ common:
   tags: extensibility
   integration_platforms:
     - custom_plank
-    - nucleof429zi
+    - qemu_nucleof429zi
 tests:
   lib.custom: {}
   lib.custom.non_default:
