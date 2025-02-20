@@ -1,5 +1,8 @@
 common:
-  tags: CI/CD
+  tags: CICD
+  integration_platforms:
+    - nucleo_f429zi
+
 tests:
   lib.custom: {}
   lib.custom.non_default:
