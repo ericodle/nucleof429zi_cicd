@@ -1,8 +1,5 @@
 common:
-  tags: extensibility
-  integration_platforms:
-    - custom_plank
-    - qemu_nucleof429zi
+  tags: CI/CD
 tests:
   lib.custom: {}
   lib.custom.non_default:
