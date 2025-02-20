@@ -1,9 +1,11 @@
 common:
   tags: extensibility
   integration_platforms:
-    - custom_plank
-    - qemu_cortex_m0
+    - nucleof429zi  
+    
 tests:
-  lib.custom: {}
+  lib.custom:
+    platform_allow: nucleof429zi 
   lib.custom.non_default:
     extra_args: CONFIG_CUSTOM_GET_VALUE_DEFAULT=6
+    platform_allow: nucleof429zi 
