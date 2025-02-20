@@ -1,11 +1,8 @@
 common:
   tags: extensibility
   integration_platforms:
-    - nucleof429zi  
-    
+    - nucleof429zi
 tests:
-  lib.custom:
-    platform_allow: nucleof429zi 
+  lib.custom: {}
   lib.custom.non_default:
     extra_args: CONFIG_CUSTOM_GET_VALUE_DEFAULT=6
-    platform_allow: nucleof429zi 
