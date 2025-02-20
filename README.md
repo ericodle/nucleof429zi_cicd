@@ -75,7 +75,7 @@ west update
 To build the application, run the following command:
 
 ```shell
-cd example-application
+cd nucleof429zi_cicd
 west build -b nucleo_f429zi app
 ```
 
