@@ -6,9 +6,9 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'Example Application'
-copyright = '2024, The Zephyr Community'
-author = 'The Zephyr Community'
+project = 'nucleof429zi_cicd'
+copyright = '2025'
+author = 'EO'
 release = '1.0.0'
 
 # -- General configuration ---------------------------------------------------
