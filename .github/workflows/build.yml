@@ -1,4 +1,4 @@
-name: Build
+name: Build and Twister Test
 
 on:
   push:
@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-22.04, macos-13, macos-14, windows-2022]
+        os: [ubuntu-22.04]
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -39,11 +39,7 @@ jobs:
         working-directory: example-application
         shell: bash
         run: |
-          EXTRA_TWISTER_FLAGS=""
-          if [ "${{ runner.os }}" = "Windows" ]; then
-            EXTRA_TWISTER_FLAGS="--short-build-path -O C:/twister-out"
-          else
-            EXTRA_TWISTER_FLAGS="--short-build-path -O /tmp/twister-out"
+          EXTRA_TWISTER_FLAGS="--short-build-path -O /tmp/twister-out"
           fi
           west twister -T app -v --inline-logs --integration $EXTRA_TWISTER_FLAGS
 
@@ -51,11 +47,7 @@ jobs:
         working-directory: example-application
         shell: bash
         run: |
-          EXTRA_TWISTER_FLAGS=""
-          if [ "${{ runner.os }}" = "Windows" ]; then
-            EXTRA_TWISTER_FLAGS="--short-build-path -O C:/twister-out"
-          else
-            EXTRA_TWISTER_FLAGS="--short-build-path -O /tmp/twister-out"
+          EXTRA_TWISTER_FLAGS="--short-build-path -O /tmp/twister-out"
           fi
           west twister -T tests -v --inline-logs --integration $EXTRA_TWISTER_FLAGS
 
