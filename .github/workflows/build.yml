@@ -22,7 +22,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          path: example-application
+          path: nucleof429zi_cicd
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -32,18 +32,18 @@ jobs:
       - name: Setup Zephyr project
         uses: zephyrproject-rtos/action-zephyr-setup@v1
         with:
-          app-path: example-application
+          app-path: nucleof429zi_cicd
           toolchains: arm-zephyr-eabi
 
       - name: Build firmware
-        working-directory: example-application
+        working-directory: nucleof429zi_cicd
         shell: bash
         run: |
           EXTRA_TWISTER_FLAGS="--short-build-path -O /tmp/twister-out"
           west twister -T app -v --inline-logs --integration $EXTRA_TWISTER_FLAGS
 
       - name: Run Twister Tests
-        working-directory: example-application
+        working-directory: nucleof429zi_cicd
         shell: bash
         run: |
           EXTRA_TWISTER_FLAGS="--short-build-path -O /tmp/twister-out"
@@ -55,4 +55,4 @@ jobs:
         with:
           name: twister-test-results-${{ matrix.os }}
           path: |
-            example-application/twister-out/**/*
+            nucleof429zi_cicd/twister-out/**/*
