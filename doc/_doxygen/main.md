@@ -1,5 +1,5 @@
 # Introduction
 
-This is the Doxygen documentation for [example-application].
+This is the Doxygen documentation for [nucleof429zi_cicd].
 
-[example-application]: https://github.com/zephyrproject-rtos/example-application
+[nucleof429zi_cicd]: https://github.com/ericodle/nucleof429zi_cicd
