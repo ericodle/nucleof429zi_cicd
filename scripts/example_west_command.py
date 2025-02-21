@@ -1,11 +1,3 @@
-# Copyright (c) 2019 Foundries.io
-# Copyright (c) 2022 Nordic Semiconductor ASA
-# SPDX-License-Identifier: Apache-2.0
-
-'''example_west_command.py
-
-Example of a west extension in the example-application repository.'''
-
 from west.commands import WestCommand  # your extension must subclass this
 from west import log                   # use this for user output
 
@@ -15,7 +7,6 @@ class ExampleWestCommand(WestCommand):
         super().__init__(
             'example-west-command',               # gets stored as self.name
             'an example west extension command',  # self.help
-            # self.description:
             '''\
 A multi-line description of example-west-command.
 
@@ -47,3 +38,6 @@ endings.''')
         #   required is BAR
         log.inf('--optional is', args.optional)
         log.inf('required is', args.required)
+
+        # Print the custom message
+        log.inf('This west command script works')
