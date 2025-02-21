@@ -2,7 +2,11 @@ name: Build
 
 on:
   push:
+    branches:
+      - main
   pull_request:
+    branches:
+      - main
   schedule:
     - cron: "0 0 * * *"
 
@@ -13,8 +17,9 @@ jobs:
       matrix:
         os: [ubuntu-22.04, macos-13, macos-14, windows-2022]
     runs-on: ${{ matrix.os }}
+
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           path: example-application
@@ -34,16 +39,30 @@ jobs:
         working-directory: example-application
         shell: bash
         run: |
+          EXTRA_TWISTER_FLAGS=""
           if [ "${{ runner.os }}" = "Windows" ]; then
-            EXTRA_TWISTER_FLAGS="--short-build-path -O/tmp/twister-out"
+            EXTRA_TWISTER_FLAGS="--short-build-path -O C:/twister-out"
+          else
+            EXTRA_TWISTER_FLAGS="--short-build-path -O /tmp/twister-out"
           fi
           west twister -T app -v --inline-logs --integration $EXTRA_TWISTER_FLAGS
 
-      - name: Twister Tests
+      - name: Run Twister Tests
         working-directory: example-application
         shell: bash
         run: |
+          EXTRA_TWISTER_FLAGS=""
           if [ "${{ runner.os }}" = "Windows" ]; then
-            EXTRA_TWISTER_FLAGS="--short-build-path -O/tmp/twister-out"
+            EXTRA_TWISTER_FLAGS="--short-build-path -O C:/twister-out"
+          else
+            EXTRA_TWISTER_FLAGS="--short-build-path -O /tmp/twister-out"
           fi
           west twister -T tests -v --inline-logs --integration $EXTRA_TWISTER_FLAGS
+
+      - name: Upload Twister Test Results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: twister-test-results-${{ matrix.os }}
+          path: |
+            example-application/twister-out/**/*
