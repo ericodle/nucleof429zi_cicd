@@ -48,17 +48,33 @@ points to the development branch of Zephyr, also `main`.
 [west_ext]: https://docs.zephyrproject.org/latest/develop/west/extensions.html
 [runner_ext]: https://docs.zephyrproject.org/latest/develop/modules.html#external-runners
 
-## Getting Started
+## Zephyr Setup
 
 Before getting started, make sure you have a proper Zephyr development
 environment. Follow the official
 [Zephyr Getting Started Guide](https://docs.zephyrproject.org/latest/getting_started/index.html).
 
-### Initialization
+## Quick App Setup
 
-The first step is to initialize the workspace folder (``my-workspace``) where
-the ``example-application`` and all Zephyr modules will be cloned. Run the following
-command:
+```shell
+source ~/zephyrproject/.venv/bin/activate
+west init -m https://github.com/ericodle/nucleof429zi_cicd --mr main my-workspace
+cd my-workspace
+west update
+cd nucleof429zi_cicd
+west build -b nucleo_f429zi app
+```
+
+## Quick Testing/Documentation
+```shell
+west twister -T tests --integration
+cd doc
+pip install -r requirements.txt
+doxygen
+make html
+```
+
+## Step-by-Step Setup
 
 Activate the zephyr virutal environment created during setup:
 
@@ -67,17 +83,17 @@ source ~/zephyrproject/.venv/bin/activate
 ```
 
 Initialize my-workspace for the example-application (main branch):
+
 ```shell
 west init -m https://github.com/ericodle/nucleof429zi_cicd --mr main my-workspace
 cd my-workspace
 ```
 
 Update Zephyr modules:
+
 ```shell
 west update
 ```
-
-### Building the app
 
 To build the application, run the following command:
 
@@ -86,25 +102,11 @@ cd nucleof429zi_cicd
 west build -b nucleo_f429zi app
 ```
 
-### quick Setup
-
-```shell
-source ~/zephyrproject/.venv/bin/activate
-west init -m https://github.com/ericodle/nucleof429zi_cicd --mr main my-workspace
-cd my-workspace
-west update
-cd nucleof429zi_cicd
-west build -b nucleo_f429zi app
-```
-### Running
-
 Once you have built the application, run the following command to flash it to your board:
 
 ```shell
 west flash --runner openocd
 ```
-
-### Testing
 
 To execute Twister integration tests, run the following command:
 
@@ -112,35 +114,38 @@ To execute Twister integration tests, run the following command:
 west twister -T tests --integration
 ```
 
-### Documentation
-
-A minimal documentation setup is provided for Doxygen and Sphinx. To build the
-documentation first change to the ``doc`` folder:
+Documentation is provided for Doxygen and Sphinx. 
+To build the documentation first change to the ``doc`` folder:
 
 ```shell
 cd doc
 ```
 
-Before continuing, check if you have Doxygen installed. It is recommended to
-use the same Doxygen version used in [CI](.github/workflows/docs.yml). To
-install Sphinx, make sure you have a Python installation in place and run:
+Check if you have Doxygen installed:
+
+```shell
+sudo apt install doxygen
+```
+
+To install Sphinx, run:
 
 ```shell
 pip install -r requirements.txt
 ```
 
-API documentation (Doxygen) can be built using the following command:
+Build API documentation (Doxygen) using the following command:
 
 ```shell
 doxygen
 ```
 
-The output will be stored in the ``_build_doxygen`` folder. Similarly, the
-Sphinx documentation (HTML) can be built using the following command:
+The output will be stored in the ``_build_doxygen`` folder. You can browse it as a webpage from index.html.
+
+Similarly, the Sphinx documentation (HTML) can be built using the following command:
 
 ```shell
 make html
 ```
 
-The output will be stored in the ``_build_sphinx`` folder. You may check for
-other output formats other than HTML by running ``make help``.
+The output will be stored in the ``_build_sphinx`` folder. 
+You can browse it as a webpage from index.html.
