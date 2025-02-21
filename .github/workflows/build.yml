@@ -40,7 +40,6 @@ jobs:
         shell: bash
         run: |
           EXTRA_TWISTER_FLAGS="--short-build-path -O /tmp/twister-out"
-          fi
           west twister -T app -v --inline-logs --integration $EXTRA_TWISTER_FLAGS
 
       - name: Run Twister Tests
@@ -48,7 +47,6 @@ jobs:
         shell: bash
         run: |
           EXTRA_TWISTER_FLAGS="--short-build-path -O /tmp/twister-out"
-          fi
           west twister -T tests -v --inline-logs --integration $EXTRA_TWISTER_FLAGS
 
       - name: Upload Twister Test Results
