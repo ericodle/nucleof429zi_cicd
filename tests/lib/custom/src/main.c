@@ -3,9 +3,12 @@
 #include <zephyr/drivers/gpio.h>
 #include <zephyr/sys/util.h>
 
-// Declare external functions from main.c
+// Include the main application functions
 extern void blink_led(int duration);
 extern void blink_sos(void);
+
+// Mock GPIO structure
+static struct gpio_dt_spec mock_led = {0};
 
 // Fake GPIO state for testing
 static int fake_gpio_state = 0;
@@ -17,21 +20,22 @@ int mock_gpio_pin_set_dt(const struct gpio_dt_spec *spec, int value)
     return 0; // Simulate success
 }
 
-// Test that LED blinks for the expected durations
+// Test LED blink durations
 ZTEST(morse_code_tests, test_blink_durations)
 {
-    blink_led(200); // Simulate DOT
-    zassert_equal(fake_gpio_state, 0, "LED should be off after blinking.");
-
-    blink_led(600); // Simulate DASH
-    zassert_equal(fake_gpio_state, 0, "LED should be off after blinking.");
+    int test_durations[] = {200, 600, 200}; // DOT, DASH, GAP
+    for (int i = 0; i < ARRAY_SIZE(test_durations); i++) {
+        blink_led(test_durations[i]);
+        zassert_equal(fake_gpio_state, 0, "LED should be off after blinking.");
+    }
 }
 
-// Test the SOS sequence
+// Test SOS pattern structure
 ZTEST(morse_code_tests, test_sos_pattern)
 {
+    // Capture LED states and durations
     blink_sos();
-    zassert_equal(fake_gpio_state, 0, "LED should be off after the SOS sequence.");
+    zassert_equal(fake_gpio_state, 0, "LED should be off after SOS sequence.");
 }
 
 // Register the test suite
