@@ -1,42 +1,42 @@
+/*
+ * Copyright (c) 2021 Legrand North America, LLC.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/*
+ * @file test custom_lib library
+ *
+ * This suite verifies that the methods provided with the custom_lib
+ * library works correctly.
+ */
+
+#include <limits.h>
+
 #include <zephyr/ztest.h>
-#include <zephyr/kernel.h>
-#include <zephyr/drivers/gpio.h>
-#include <zephyr/sys/util.h>
 
-// Include the main application functions
-extern void blink_led(int duration);
-extern void blink_sos(void);
+#include <app/lib/custom.h>
 
-// Mock GPIO structure
-static struct gpio_dt_spec mock_led = {0};
-
-// Fake GPIO state for testing
-static int fake_gpio_state = 0;
-
-// Mock function for gpio_pin_set_dt()
-int mock_gpio_pin_set_dt(const struct gpio_dt_spec *spec, int value)
+ZTEST(custom_lib, test_get_value)
 {
-    fake_gpio_state = value;
-    return 0; // Simulate success
+	/* Verify standard behavior */
+	zassert_equal(custom_get_value(INT_MIN), INT_MIN,
+		"get_value failed input of INT_MIN");
+	zassert_equal(custom_get_value(INT_MIN + 1), INT_MIN + 1,
+		"get_value failed input of INT_MIN + 1");
+	zassert_equal(custom_get_value(-1), -1,
+		"get_value failed input of -1");
+	zassert_equal(custom_get_value(1), 1,
+		"get_value failed input of 1");
+	zassert_equal(custom_get_value(INT_MAX - 1), INT_MAX - 1,
+		"get_value failed input of INT_MAX - 1");
+	zassert_equal(custom_get_value(INT_MAX), INT_MAX,
+		"get_value failed input of INT_MAX");
+
+	/* Verify override behavior */
+	zassert_equal(custom_get_value(0),
+		CONFIG_CUSTOM_GET_VALUE_DEFAULT,
+		"get_value failed input of 0");
 }
 
-// Test LED blink durations
-ZTEST(morse_code_tests, test_blink_durations)
-{
-    int test_durations[] = {200, 600, 200}; // DOT, DASH, GAP
-    for (int i = 0; i < ARRAY_SIZE(test_durations); i++) {
-        blink_led(test_durations[i]);
-        zassert_equal(fake_gpio_state, 0, "LED should be off after blinking.");
-    }
-}
-
-// Test SOS pattern structure
-ZTEST(morse_code_tests, test_sos_pattern)
-{
-    // Capture LED states and durations
-    blink_sos();
-    zassert_equal(fake_gpio_state, 0, "LED should be off after SOS sequence.");
-}
-
-// Register the test suite
-ZTEST_SUITE(morse_code_tests, NULL, NULL, NULL, NULL, NULL);
+ZTEST_SUITE(custom_lib, NULL, NULL, NULL, NULL, NULL);
