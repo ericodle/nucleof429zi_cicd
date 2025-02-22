@@ -1,7 +1,19 @@
-common:
-  tags: eric custom ztests
-  integration_platforms:
-    - nucleo_f429zi
-
+test_suite: blink_led_tests
 tests:
-  custom.erictests:
+  - test_blink_led
+  - test_blink_sos
+
+platform: nucleo_f429zi
+board: nucleo_f429zi
+toolchain: zephyr
+runner: native_posix
+
+twister:
+  build:
+    clean: true
+  run:
+    tests:
+      - tests/custom/erictests
+    platforms:
+      - nucleo_f429zi
+    extra_args: []
