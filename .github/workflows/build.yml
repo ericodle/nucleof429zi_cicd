@@ -55,4 +55,4 @@ jobs:
         with:
           name: twister-test-results-${{ matrix.os }}
           path: |
-            nucleof429zi_cicd/twister-out/**/*
+            tmp/twister-out/**/*
