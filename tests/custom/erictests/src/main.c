@@ -37,14 +37,13 @@ ZTEST(blink_led_tests, test_blink_led) {
 }
 
 /* Test if blink_sos correctly executes the SOS pattern */
-ZTEST(blink_led_tests, tesgit add
-    t_blink_sos) {
+ZTEST(blink_led_tests, test_blink_sos) {
     blink_sos();
 
     /* Placeholder assertion - if mocking frameworks were available, 
        we'd validate the sequence of GPIO operations */
     zassert_true(1, "Blink SOS executed correctly");
-} 
+}
 
 /* Test Suite Registration */
 ZTEST_SUITE(blink_led_tests, NULL, NULL, NULL, NULL, NULL);
