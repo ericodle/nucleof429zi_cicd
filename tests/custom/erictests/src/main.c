@@ -3,11 +3,18 @@
 #include <zephyr/drivers/gpio.h>
 #include <zephyr/sys/util.h>
 
-/* Mock function for gpio_pin_set_dt */
-static int mock_gpio_pin_set_dt(const struct gpio_dt_spec *spec, int value) __attribute__((unused));
+/* Mock functions for gpio_pin_set_dt and k_msleep */
+static int mock_gpio_pin_set_dt_call_count = 0;
+static int mock_k_msleep_call_count = 0;
 
-/* Mock function for k_msleep */
-static void mock_k_msleep(int duration) __attribute__((unused));
+static int mock_gpio_pin_set_dt(const struct gpio_dt_spec *spec, int value) {
+    mock_gpio_pin_set_dt_call_count++;
+    return 0; // Mock behavior
+}
+
+static void mock_k_msleep(int duration) {
+    mock_k_msleep_call_count++;
+}
 
 /* Replace original functions with test doubles */
 #define gpio_pin_set_dt mock_gpio_pin_set_dt
@@ -23,17 +30,22 @@ ZTEST(blink_led_tests, test_blink_led) {
     /* Call function to test */
     blink_led(duration);
 
-    /* If gpio_pin_set_dt were real, we'd assert the expected GPIO behavior */
-    zassert_true(1, "Blink LED function executed"); // Placeholder assertion
+    /* Assert that mock_gpio_pin_set_dt was called at least once */
+    zassert_true(mock_gpio_pin_set_dt_call_count > 0, "GPIO set was not called");
+
+    /* You could also assert the number of times k_msleep is called, depending on the logic of blink_led */
+    zassert_true(mock_k_msleep_call_count > 0, "Sleep function was not called");
 }
 
 /* Test if blink_sos correctly executes the SOS pattern */
 ZTEST(blink_led_tests, test_blink_sos) {
     blink_sos();
 
-    /* Placeholder assertion - if mocking frameworks were available, 
-       we'd validate the sequence of GPIO operations */
-    zassert_true(1, "Blink SOS executed correctly");
+    /* Assert that mock_gpio_pin_set_dt was called multiple times */
+    zassert_true(mock_gpio_pin_set_dt_call_count > 5, "GPIO set was not called enough times for SOS");
+
+    /* Assert that k_msleep was called the correct number of times */
+    zassert_true(mock_k_msleep_call_count > 0, "Sleep function was not called during SOS sequence");
 }
 
 /* Test Suite Registration */
