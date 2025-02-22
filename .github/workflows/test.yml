@@ -1,0 +1,37 @@
+name: Run Twister Tests
+
+on:
+  workflow_run:
+    workflows: ["Build Firmware"]
+    types:
+      - completed
+
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    needs: build  # This ensures the test job runs only after the build job completes
+
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: build-artifacts
+
+      - name: Run Twister Tests
+        working-directory: nucleof429zi_cicd
+        shell: bash
+        run: |
+          EXTRA_TWISTER_FLAGS="--short-build-path -O /tmp/twister-out"
+          west twister -T tests -v --inline-logs --integration $EXTRA_TWISTER_FLAGS --debug
+
+      - name: List contents of twister-out directory
+        run: |
+          ls -R /tmp/twister-out
+
+      - name: Upload Twister Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: twister-test-results
+          path: /tmp/twister-out/**/*
+

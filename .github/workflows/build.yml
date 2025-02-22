@@ -1,4 +1,4 @@
-name: Build and Twister Test
+name: Build Firmware
 
 on:
   push:
@@ -12,12 +12,7 @@ on:
 
 jobs:
   build:
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-22.04]
-    runs-on: ${{ matrix.os }}
-
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -42,20 +37,9 @@ jobs:
           EXTRA_TWISTER_FLAGS="--short-build-path -O /tmp/twister-out"
           west twister -T app -v --inline-logs --integration $EXTRA_TWISTER_FLAGS
 
-      - name: Run Twister Tests
-        working-directory: nucleof429zi_cicd
-        shell: bash
-        run: |
-          EXTRA_TWISTER_FLAGS="--short-build-path -O /tmp/twister-out"
-          west twister -T tests -v --inline-logs --integration $EXTRA_TWISTER_FLAGS
-
-      - name: List contents of twister-out directory
-        run: |
-          ls -R /tmp/twister-out
-
-      - name: Upload Twister Test Results
-        if: always()
+      - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: twister-test-results-${{ matrix.os }}
+          name: build-artifacts
           path: /tmp/twister-out/**/*
+
