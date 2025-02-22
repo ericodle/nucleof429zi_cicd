@@ -8,8 +8,16 @@
 #define LETTER_GAP_MS 300
 #define WORD_GAP_MS 700
 
-/* Reproduce the blink_sos function here */
-void blink_sos(void) {
+/* Reproduce the blink_led and blink_sos functions here */
+void blink_led(int duration) {
+    gpio_pin_set_dt(&led, 1);
+    k_msleep(duration);
+    gpio_pin_set_dt(&led, 0);
+    k_msleep(GAP_TIME_MS);
+}
+
+void blink_sos() {
+    // SOS: ... --- ...
     int sos_pattern[] = {DOT_TIME_MS, DOT_TIME_MS, DOT_TIME_MS,  
                          DASH_TIME_MS, DASH_TIME_MS, DASH_TIME_MS,
                          DOT_TIME_MS, DOT_TIME_MS, DOT_TIME_MS};
@@ -23,13 +31,9 @@ void blink_sos(void) {
     k_msleep(WORD_GAP_MS);  // Pause before repeating
 }
 
-
 /* Mock functions for gpio_pin_set_dt and k_msleep */
 static int mock_gpio_pin_set_dt_call_count = 0;
 static int mock_k_msleep_call_count = 0;
-
-extern void blink_led(int duration);
-extern void blink_sos();
 
 /* Test if blink_led correctly sets the GPIO pin */
 ZTEST(blink_led_tests, test_blink_led) {
