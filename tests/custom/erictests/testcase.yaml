@@ -4,4 +4,4 @@ common:
     - nucleo_f429zi
 
 tests:
-  src: {}
+  custom.erictests: {}
