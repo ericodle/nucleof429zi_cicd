@@ -17,3 +17,10 @@ twister:
     platforms:
       - nucleo_f429zi
     extra_args: []
+
+common:
+  tags: sos_tests
+  integration_platforms:
+    - nucleo_f429zi
+tests:
+  custom.erictests: {}
