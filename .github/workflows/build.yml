@@ -46,7 +46,7 @@ jobs:
         working-directory: nucleof429zi_cicd
         shell: bash
         run: |
-          EXTRA_TWISTER_FLAGS="--short-build-path -O /tmp/twister-out"
+          EXTRA_TWISTER_FLAGS=" --verbose --short-build-path -O /tmp/twister-out"
           west twister -T tests -v --inline-logs --integration $EXTRA_TWISTER_FLAGS
 
       - name: Upload Twister Test Results
@@ -55,4 +55,4 @@ jobs:
         with:
           name: twister-test-results-${{ matrix.os }}
           path: |
-            nucleof429zi_cicd/twister-out/**/*
+            tmp/twister-out/**/*
