@@ -5,6 +5,5 @@ common:
 
 tests:
   custom.erictests:
-    platforms: [nucleo_f429zi] 
-    tags:
-      - CICD
+    platform_allow: nucleo_f429zi
+    tags: CICD
