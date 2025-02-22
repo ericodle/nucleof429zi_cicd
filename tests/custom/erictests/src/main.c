@@ -7,19 +7,6 @@
 static int mock_gpio_pin_set_dt_call_count = 0;
 static int mock_k_msleep_call_count = 0;
 
-static int mock_gpio_pin_set_dt(const struct gpio_dt_spec *spec, int value) {
-    mock_gpio_pin_set_dt_call_count++;
-    return 0; // Mock behavior
-}
-
-static void mock_k_msleep(int duration) {
-    mock_k_msleep_call_count++;
-}
-
-/* Replace original functions with test doubles */
-#define gpio_pin_set_dt mock_gpio_pin_set_dt
-#define k_msleep mock_k_msleep
-
 extern void blink_led(int duration);
 extern void blink_sos();
 
