@@ -1,0 +1,7 @@
+common:
+  tags: CICD
+  integration_platforms:
+    - nucleo_f429zi
+
+tests:
+  erictests: {}
