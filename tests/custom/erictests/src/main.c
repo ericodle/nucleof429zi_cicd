@@ -8,6 +8,9 @@
 #define LETTER_GAP_MS 300
 #define WORD_GAP_MS 700
 
+#define LED0_NODE DT_ALIAS(led0)
+static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(LED0_NODE, gpios);
+
 /* Reproduce the blink_led and blink_sos functions here */
 void blink_led(int duration) {
     gpio_pin_set_dt(&led, 1);
