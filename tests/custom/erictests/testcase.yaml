@@ -1,9 +1,9 @@
 common:
-  tags: CICD
+  tags: eric custom ztests
   integration_platforms:
     - nucleo_f429zi
 
 tests:
   custom.erictests:
     platform_allow: nucleo_f429zi
-    tags: CICD
+    tags: eric custom ztests

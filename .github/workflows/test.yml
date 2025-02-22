@@ -1,10 +1,14 @@
-name: Run Twister Tests
+name: Ztests
 
 on:
-  workflow_run:
-    workflows: ["Build Firmware"]
-    types:
-      - completed
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  schedule:
+    - cron: "0 0 * * *"
 
 jobs:
   test:
