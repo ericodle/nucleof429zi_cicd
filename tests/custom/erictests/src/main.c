@@ -3,6 +3,27 @@
 #include <zephyr/drivers/gpio.h>
 #include <zephyr/sys/util.h>
 
+#define DOT_TIME_MS 200
+#define DASH_TIME_MS 600
+#define LETTER_GAP_MS 300
+#define WORD_GAP_MS 700
+
+/* Reproduce the blink_sos function here */
+void blink_sos(void) {
+    int sos_pattern[] = {DOT_TIME_MS, DOT_TIME_MS, DOT_TIME_MS,  
+                         DASH_TIME_MS, DASH_TIME_MS, DASH_TIME_MS,
+                         DOT_TIME_MS, DOT_TIME_MS, DOT_TIME_MS};
+    
+    for (int i = 0; i < 9; i++) {
+        blink_led(sos_pattern[i]);
+        if (i == 2 || i == 5) {
+            k_msleep(LETTER_GAP_MS);  // Longer gap between letters
+        }
+    }
+    k_msleep(WORD_GAP_MS);  // Pause before repeating
+}
+
+
 /* Mock functions for gpio_pin_set_dt and k_msleep */
 static int mock_gpio_pin_set_dt_call_count = 0;
 static int mock_k_msleep_call_count = 0;
