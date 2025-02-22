@@ -49,10 +49,13 @@ jobs:
           EXTRA_TWISTER_FLAGS="--short-build-path -O /tmp/twister-out"
           west twister -T tests -v --inline-logs --integration $EXTRA_TWISTER_FLAGS
 
+      - name: List contents of twister-out directory
+        run: |
+          ls -R /tmp/twister-out
+
       - name: Upload Twister Test Results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: twister-test-results-${{ matrix.os }}
-          path: |
-            tmp/twister-out/**/*
+          path: /tmp/twister-out/**/*
