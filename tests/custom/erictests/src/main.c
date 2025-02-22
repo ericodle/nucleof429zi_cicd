@@ -4,15 +4,10 @@
 #include <zephyr/sys/util.h>
 
 /* Mock function for gpio_pin_set_dt */
-static int mock_gpio_pin_set_dt(const struct gpio_dt_spec *spec, int value) {
-    /* Simulate GPIO setting (for verification in test cases) */
-    return 0;
-}
+static int mock_gpio_pin_set_dt(const struct gpio_dt_spec *spec, int value) __attribute__((unused));
 
 /* Mock function for k_msleep */
-static void mock_k_msleep(int duration) {
-    /* Simulate sleep without actual delay */
-}
+static void mock_k_msleep(int duration) __attribute__((unused));
 
 /* Replace original functions with test doubles */
 #define gpio_pin_set_dt mock_gpio_pin_set_dt
