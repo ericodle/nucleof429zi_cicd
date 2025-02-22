@@ -1,19 +1,17 @@
 #include <zephyr/ztest.h>
 #include <zephyr/kernel.h>
 #include <zephyr/drivers/gpio.h>
-#include <zephyr/sys/util.h>
 
+/* Reproduced macros and functions from actual app /src/main.c */
 #define DOT_TIME_MS 200
 #define DASH_TIME_MS 600
+#define GAP_TIME_MS 200  
 #define LETTER_GAP_MS 300
 #define WORD_GAP_MS 700
-#define GAP_TIME_MS 200   // Gap between elements
-
 
 #define LED0_NODE DT_ALIAS(led0)
 static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(LED0_NODE, gpios);
 
-/* Reproduce the blink_led and blink_sos functions here */
 void blink_led(int duration) {
     gpio_pin_set_dt(&led, 1);
     k_msleep(duration);
@@ -30,10 +28,10 @@ void blink_sos() {
     for (int i = 0; i < 9; i++) {
         blink_led(sos_pattern[i]);
         if (i == 2 || i == 5) {
-            k_msleep(LETTER_GAP_MS);  // Longer gap between letters
+            k_msleep(LETTER_GAP_MS);
         }
     }
-    k_msleep(WORD_GAP_MS);  // Pause before repeating
+    k_msleep(WORD_GAP_MS);
 }
 
 /* Mock functions for gpio_pin_set_dt and k_msleep */
