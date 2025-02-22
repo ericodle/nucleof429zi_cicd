@@ -4,6 +4,6 @@ common:
     - nucleo_f429zi
 
 tests:
-  custom.erictests:
-    platform_allow: nucleo_f429zi
-    tags: eric custom ztests
+  custom.erictests: {}
+  platform_allow: nucleo_f429zi
+  tags: eric custom ztests
