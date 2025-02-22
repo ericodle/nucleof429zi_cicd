@@ -3,10 +3,6 @@
 #include <zephyr/drivers/gpio.h>
 #include <zephyr/sys/util.h>
 
-/* Define the LED mock */
-#define LED0_NODE DT_ALIAS(led0)
-static struct gpio_dt_spec led = GPIO_DT_SPEC_GET(LED0_NODE, gpios);
-
 /* Mock function for gpio_pin_set_dt */
 static int mock_gpio_pin_set_dt(const struct gpio_dt_spec *spec, int value) {
     /* Simulate GPIO setting (for verification in test cases) */
