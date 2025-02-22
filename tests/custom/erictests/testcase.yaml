@@ -1,6 +1,4 @@
-common:
-  tags: sos_tests
-  integration_platforms:
-    - nucleo_f429zi
 tests:
-  custom.erictests: {}
+  custom.erictests:
+    platform_allow: nucleo_f429zi
+    tags: custom
