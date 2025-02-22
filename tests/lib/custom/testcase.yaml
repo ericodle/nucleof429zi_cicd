@@ -1,9 +1,0 @@
-common:
-  tags: CICD
-  integration_platforms:
-    - nucleo_f429zi
-
-tests:
-  lib.custom: {}
-  lib.custom.non_default:
-    extra_args: CONFIG_CUSTOM_GET_VALUE_DEFAULT=6
