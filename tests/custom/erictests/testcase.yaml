@@ -7,5 +7,3 @@ tests:
   custom.erictests:
     platform_allow: nucleo_f429zi
     tags: my_test
-    build_only: false
-    harness: console
