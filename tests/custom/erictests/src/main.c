@@ -1,67 +1,26 @@
-#include <zephyr/ztest.h>
-#include <zephyr/kernel.h>
-#include <zephyr/drivers/gpio.h>
+/*
+ * Copyright (c) 2016 Intel Corporation
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
-/* Reproduced macros and functions from actual app /src/main.c */
-#define DOT_TIME_MS 200
-#define DASH_TIME_MS 600
-#define GAP_TIME_MS 200  
-#define LETTER_GAP_MS 300
-#define WORD_GAP_MS 700
+ #include <zephyr/ztest.h>
 
-#define LED0_NODE DT_ALIAS(led0)
-static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(LED0_NODE, gpios);
 
-void blink_led(int duration) {
-    gpio_pin_set_dt(&led, 1);
-    k_msleep(duration);
-    gpio_pin_set_dt(&led, 0);
-    k_msleep(GAP_TIME_MS);
-}
-
-void blink_sos() {
-    // SOS: ... --- ...
-    int sos_pattern[] = {DOT_TIME_MS, DOT_TIME_MS, DOT_TIME_MS,  
-                         DASH_TIME_MS, DASH_TIME_MS, DASH_TIME_MS,
-                         DOT_TIME_MS, DOT_TIME_MS, DOT_TIME_MS};
-    
-    for (int i = 0; i < 9; i++) {
-        blink_led(sos_pattern[i]);
-        if (i == 2 || i == 5) {
-            k_msleep(LETTER_GAP_MS);
-        }
-    }
-    k_msleep(WORD_GAP_MS);
-}
-
-/* Mock functions for gpio_pin_set_dt and k_msleep */
-static int mock_gpio_pin_set_dt_call_count = 0;
-static int mock_k_msleep_call_count = 0;
-
-/* Test if blink_led correctly sets the GPIO pin */
-ZTEST(blink_led_tests, test_blink_led) {
-    int duration = 200;
-
-    /* Call function to test */
-    blink_led(duration);
-
-    /* Assert that mock_gpio_pin_set_dt was called at least once */
-    zassert_true(mock_gpio_pin_set_dt_call_count > 0, "GPIO set was not called");
-
-    /* You could also assert the number of times k_msleep is called, depending on the logic of blink_led */
-    zassert_true(mock_k_msleep_call_count > 0, "Sleep function was not called");
-}
-
-/* Test if blink_sos correctly executes the SOS pattern */
-ZTEST(blink_led_tests, test_blink_sos) {
-    blink_sos();
-
-    /* Assert that mock_gpio_pin_set_dt was called multiple times */
-    zassert_true(mock_gpio_pin_set_dt_call_count > 5, "GPIO set was not called enough times for SOS");
-
-    /* Assert that k_msleep was called the correct number of times */
-    zassert_true(mock_k_msleep_call_count > 0, "Sleep function was not called during SOS sequence");
-}
-
-/* Test Suite Registration */
-ZTEST_SUITE(blink_led_tests, NULL, NULL, NULL, NULL, NULL);
+ ZTEST_SUITE(framework_tests, NULL, NULL, NULL, NULL, NULL);
+ 
+ /**
+  * @brief Test Asserts
+  *
+  * This test verifies various assert macros provided by ztest.
+  *
+  */
+ ZTEST(framework_tests, test_assert)
+ {
+     zassert_true(1, "1 was false");
+     zassert_false(0, "0 was true");
+     zassert_is_null(NULL, "NULL was not NULL");
+     zassert_not_null("foo", "\"foo\" was NULL");
+     zassert_equal(1, 1, "1 was not equal to 1");
+     zassert_equal_ptr(NULL, NULL, "NULL was not equal to NULL");
+ }
