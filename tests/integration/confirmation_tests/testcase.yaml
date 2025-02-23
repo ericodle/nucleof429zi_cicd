@@ -1,9 +1,8 @@
 tests:
-  custom.sos_tests:
+  integration.confirmation_tests:
     build_only: false
     platform_allow:
-      - native_posix
-      - native_sim
+      - nucleo_f429zi
     integration_platforms:
-      - native_sim
+      - nucleo_f429zi
     tags: test_framework
