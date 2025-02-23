@@ -1,4 +1,9 @@
 tests:
   custom.erictests:
-    platform_allow: nucleo_f429zi
-    tags: custom
+    build_only: false
+    platform_allow:
+      - native_posix
+      - native_sim
+    integration_platforms:
+      - native_sim
+    tags: test_framework
