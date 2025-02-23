@@ -1,7 +1,5 @@
 /*
- * Copyright (c) 2016 Intel Corporation
- *
- * SPDX-License-Identifier: Apache-2.0
+TODO: Get these tests to actually run on simulated hardware
  */
 
  #include <zephyr/ztest.h>
