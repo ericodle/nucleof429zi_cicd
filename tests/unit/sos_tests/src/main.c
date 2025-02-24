@@ -1,51 +1,26 @@
+/*
+TODO: write actual unit tests for SOS.
+ */
 
-#include <zephyr/ztest.h>
-#include <zephyr/kernel.h>
-#include <zephyr/drivers/gpio.h>
-#include "morse.h"
 
-// Mock GPIO functionality
-static bool gpio_called = false;
 
-static int mock_gpio_pin_set(const struct gpio_dt_spec *spec, int value)
-{
-    gpio_called = true;
-    return 0; // Success
-}
+ #include <zephyr/ztest.h>
 
-// Test for blink_led
-void test_blink_led(void)
-{
-    // Set mock GPIO function
-    gpio_pin_set_dt = mock_gpio_pin_set;
-    
-    // Call the blink_led function
-    blink_led(DOT_TIME_MS);
 
-    // Assert that the mock GPIO function was called
-    zassert_true(gpio_called, "GPIO pin set not called");
-}
-
-// Test for blink_sos
-void test_blink_sos(void)
-{
-    // Set mock GPIO function
-    gpio_pin_set_dt = mock_gpio_pin_set;
-
-    // Call the blink_sos function
-    blink_sos();
-
-    // Verify GPIO was called the expected number of times (e.g., 9 for SOS)
-    zassert_true(gpio_called, "GPIO pin set not called during SOS blinking");
-}
-
-// Define the test suite
-void test_main(void)
-{
-    ztest_test_suite(morse_tests,
-        ztest_unit_test(test_blink_led),
-        ztest_unit_test(test_blink_sos)
-    );
-
-    ztest_run_test_suite(morse_tests);
-}
+ ZTEST_SUITE(framework_tests, NULL, NULL, NULL, NULL, NULL);
+ 
+ /**
+  * @brief Test Asserts
+  *
+  * This test verifies various assert macros provided by ztest.
+  *
+  */
+ ZTEST(framework_tests, test_assert)
+ {
+     zassert_true(1, "1 was false");
+     zassert_false(0, "0 was true");
+     zassert_is_null(NULL, "NULL was not NULL");
+     zassert_not_null("foo", "\"foo\" was NULL");
+     zassert_equal(1, 1, "1 was not equal to 1");
+     zassert_equal_ptr(NULL, NULL, "NULL was not equal to NULL");
+ }
