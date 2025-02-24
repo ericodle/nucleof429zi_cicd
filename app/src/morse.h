@@ -11,8 +11,6 @@
 #define LETTER_GAP_MS 600 // Gap between letters
 #define WORD_GAP_MS 1400  // Gap between words
 
-extern const struct gpio_dt_spec led; // Declare the 'led' variable here
-
 void blink_led(int duration);
 void blink_sos(void);
 
