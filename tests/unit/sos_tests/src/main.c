@@ -1,5 +1,6 @@
-#include <zephyr.h>
-#include <ztest.h>
+
+#include <zephyr/ztest.h>
+#include <zephyr/kernel.h>
 #include <zephyr/drivers/gpio.h>
 #include "morse.h"
 
