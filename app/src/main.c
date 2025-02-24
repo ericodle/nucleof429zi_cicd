@@ -1,4 +1,7 @@
 // main.c
+#include <zephyr.h>
+#include <device.h>
+#include <drivers/gpio.h>
 #include <stdio.h>
 #include "morse.h"
 
