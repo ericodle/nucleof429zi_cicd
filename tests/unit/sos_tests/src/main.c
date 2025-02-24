@@ -3,10 +3,7 @@
 #include <zephyr/kernel.h>
 
 /* Mocking the GPIO struct */
-static struct gpio_dt_spec led_mock = {
-    .port = NULL,
-    .pin = 0
-};
+extern struct gpio_dt_spec led;
 
 /* Mocking GPIO functions */
 int gpio_pin_configure_dt(const struct gpio_dt_spec *spec, gpio_flags_t flags) {
