@@ -1,9 +1,8 @@
 // main.c
-#include <zephyr.h>
-#include <device.h>
-#include <drivers/gpio.h>
 #include <stdio.h>
-#include "morse.h"
+#include <zephyr/kernel.h>
+#include <zephyr/drivers/gpio.h>
+#include <morse.h>
 
 int main(void) {
     int ret;
