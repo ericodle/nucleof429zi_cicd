@@ -1,5 +1,5 @@
 tests:
-  basic.print_test:
+  ztest.validate:
     build_only: false
     platform_allow:
       - native_posix

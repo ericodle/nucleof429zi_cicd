@@ -1,5 +1,5 @@
 tests:
-  hardware_sim.print_test:
+  ztest.hardware_sim:
     build_only: false
     platform_allow:
       - qemu_cortex_m3
