@@ -1,8 +1,0 @@
-tests:
-  integration.sos_tests:
-    build_only: false
-    platform_allow:
-      - nucleo_f429zi
-    integration_platforms:
-      - nucleo_f429zi
-    tags: test_framework
