@@ -68,7 +68,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: twister-test-results-${{ matrix.os }}
-          path: tmp/twister-out/*
+          path: |
+            tmp/twister-out/**/*
 
       - name: Upload Logs for Deployment
         if: always()
