@@ -42,10 +42,6 @@ jobs:
           EXTRA_TWISTER_FLAGS="--short-build-path -O /tmp/twister-out"
           west twister -T app -v --inline-logs --integration $EXTRA_TWISTER_FLAGS
 
-      - name: Create Twister Output Directory
-        run: |
-          mkdir -p tmp/twister-out  
-
       - name: Run Twister Tests
         working-directory: nucleof429zi_cicd
         shell: bash
@@ -56,7 +52,7 @@ jobs:
       - name: Check Twister Output Files
         run: |
           echo "Listing twister-out directory:"
-          ls -R tmp/twister-out
+          ls -R /tmp/twister-out
 
       - name: Upload Twister Test Results
         if: always()
@@ -64,14 +60,14 @@ jobs:
         with:
           name: twister-test-results-${{ matrix.os }}
           path: |
-            tmp/twister-out/**/*
+            /tmp/twister-out/**/*
 
       - name: Upload Logs for Deployment
         if: always()
         run: |
           mkdir -p deploy/logs
-          if [ -d "tmp/twister-out" ]; then
-            mv tmp/twister-out deploy/logs/
+          if [ -d "/tmp/twister-out" ]; then
+            mv /tmp/twister-out deploy/logs/
           else
             echo "No Twister output to move"
           fi
