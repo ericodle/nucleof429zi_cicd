@@ -2,7 +2,7 @@ tests:
   integration.confirmation_tests:
     build_only: false
     platform_allow:
-      - nucleo_f429zi
+      - qemu_cortex_m0
     integration_platforms:
-      - nucleo_f429zi
+      - qemu_cortex_m0
     tags: test_framework
