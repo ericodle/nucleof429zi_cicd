@@ -5,10 +5,10 @@
 const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(LED0_NODE, gpios);
 
 void blink_led(int duration) {
-    gpio_pin_set_dt(&led, 1);
-    k_msleep(duration);
-    gpio_pin_set_dt(&led, 0);
-    k_msleep(GAP_TIME_MS);
+    mock_gpio_pin_set_dt(&led, 1);
+    mock_k_msleep(duration);
+    mock_gpio_pin_set_dt(&led, 0);
+    mock_k_msleep(GAP_TIME_MS);
 }
 
 void blink_sos() {
@@ -19,8 +19,8 @@ void blink_sos() {
     for (int i = 0; i < 9; i++) {
         blink_led(sos_pattern[i]);
         if (i == 2 || i == 5) {
-            k_msleep(LETTER_GAP_MS);
+            mock_k_msleep(LETTER_GAP_MS);
         }
     }
-    k_msleep(WORD_GAP_MS);
+    mock_k_msleep(WORD_GAP_MS);
 }
