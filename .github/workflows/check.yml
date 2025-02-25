@@ -39,7 +39,7 @@ jobs:
       - name: Build Check tests
         working-directory: nucleof429zi_cicd
         run: |
-          west build -b native_posix app -- -DCONFIG_TESTING_CHECK=y
+          west build -b native_posix app 
 
       - name: Run Check tests
         working-directory: nucleof429zi_cicd/build
