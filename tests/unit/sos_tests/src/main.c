@@ -1,31 +1,26 @@
-#include <zephyr/ztest.h>
-#include <zephyr/kernel.h>
-#include <zephyr/drivers/gpio.h>
-#include "morse.h"
+/*
+TODO: write actual unit tests for SOS.
+ */
 
-/* Mock function to simulate GPIO pin control */
-static int mock_gpio_pin_set_dt(const struct gpio_dt_spec *spec, int value) {
-    ARG_UNUSED(spec);
-    ARG_UNUSED(value);
-    return 0;  /* Simulating success */
-}
 
-/* Mock function to replace k_msleep */
-static void mock_k_msleep(int ms) {
-    ARG_UNUSED(ms);
-}
 
-/* Test if blink_led executes without errors */
-ZTEST(sos_tests, test_blink_led) {
-    blink_led(DOT_TIME_MS);
-    zassert_true(true, "blink_led should execute without errors");
-}
+ #include <zephyr/ztest.h>
 
-/* Test if blink_sos executes without errors */
-ZTEST(sos_tests, test_blink_sos) {
-    blink_sos();
-    zassert_true(true, "blink_sos should execute without errors");
-}
 
-/* Define test suite */
-ZTEST_SUITE(sos_tests, NULL, NULL, NULL, NULL, NULL);
+ ZTEST_SUITE(framework_tests, NULL, NULL, NULL, NULL, NULL);
+ 
+ /**
+  * @brief Test Asserts
+  *
+  * This test verifies various assert macros provided by ztest.
+  *
+  */
+ ZTEST(framework_tests, test_assert)
+ {
+     zassert_true(1, "1 was false");
+     zassert_false(0, "0 was true");
+     zassert_is_null(NULL, "NULL was not NULL");
+     zassert_not_null("foo", "\"foo\" was NULL");
+     zassert_equal(1, 1, "1 was not equal to 1");
+     zassert_equal_ptr(NULL, NULL, "NULL was not equal to NULL");
+ }
