@@ -13,6 +13,7 @@ on:
 jobs:
   check-tests:
     runs-on: ubuntu-22.04
+    timeout-minutes: 5 
 
     steps:
       - name: Checkout repository
@@ -44,10 +45,10 @@ jobs:
       - name: Run Check tests
         working-directory: nucleof429zi_cicd/build
         run: |
-          echo "Running zephyr.elf in the background..."
-          ./zephyr/zephyr.elf > test_output.log 2>&1 &
-          sleep 5  # Wait for it to initialize
-          tail -n 100 test_output.log  # Output the last 100 lines from the log
+          echo "Running zephyr.elf with increased logging..."
+          ./zephyr/zephyr.elf -DCONFIG_LOG=y -DCONFIG_LOG_DEFAULT_LEVEL=4 > test_output.log 2>&1 &
+          sleep 5  # Add some time for the process to start
+          tail -n 100 test_output.log  # Tail the last 100 lines to check logs
 
       - name: Upload Check Test Logs
         if: always()
