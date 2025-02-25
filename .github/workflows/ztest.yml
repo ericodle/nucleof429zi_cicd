@@ -53,15 +53,10 @@ jobs:
         run: |
           mkdir -p tmp/twister-out
 
-      - name: Check if Twister output exists
-        shell: bash
+      - name: Check Twister Output Files
         run: |
-          if [ ! -d "tmp/twister-out" ]; then
-            echo "Error: Twister output directory not found"
-            exit 1
-          else
-            echo "Twister output found"
-          fi
+          echo "Listing twister-out directory:"
+          ls -R tmp/twister-out
 
       - name: Upload Twister Test Results
         if: always()
