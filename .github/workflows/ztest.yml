@@ -49,10 +49,6 @@ jobs:
           EXTRA_TWISTER_FLAGS=" --verbose --short-build-path -O /tmp/twister-out"
           west twister -T tests -v --inline-logs --integration $EXTRA_TWISTER_FLAGS
 
-      - name: Create Twister Output Directory
-        run: |
-          mkdir -p tmp/twister-out
-
       - name: Check Twister Output Files
         run: |
           echo "Listing twister-out directory:"
