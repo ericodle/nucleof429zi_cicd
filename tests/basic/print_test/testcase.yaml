@@ -1,5 +1,5 @@
 tests:
-  unit.confirmation_tests:
+  basic.print_test:
     build_only: false
     platform_allow:
       - native_posix

@@ -1,5 +1,5 @@
 tests:
-  unit.sos_tests:
+  basic.test_validation:
     build_only: false
     platform_allow:
       - native_posix
