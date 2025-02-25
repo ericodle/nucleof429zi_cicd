@@ -56,17 +56,3 @@ jobs:
           name: twister-test-results-${{ matrix.os }}
           path: |
             tmp/twister-out/**/*
-
-  analyze:
-    needs: build
-    runs-on: ubuntu-22.04
-
-    steps:
-      - name: Download Twister Test Results
-        uses: actions/download-artifact@v4
-        with:
-          name: twister-test-results-ubuntu-22.04
-          path: downloaded-results
-
-      - name: Display downloaded files
-        run: ls -R downloaded-results
