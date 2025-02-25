@@ -49,6 +49,20 @@ jobs:
           EXTRA_TWISTER_FLAGS=" --verbose --short-build-path -O /tmp/twister-out"
           west twister -T tests -v --inline-logs --integration $EXTRA_TWISTER_FLAGS
 
+      - name: Create Twister Output Directory
+        run: |
+          mkdir -p tmp/twister-out
+
+      - name: Check if Twister output exists
+        shell: bash
+        run: |
+          if [ ! -d "tmp/twister-out" ]; then
+            echo "Error: Twister output directory not found"
+            exit 1
+          else
+            echo "Twister output found"
+          fi
+
       - name: Upload Twister Test Results
         if: always()
         uses: actions/upload-artifact@v4
@@ -61,17 +75,8 @@ jobs:
         if: always()
         run: |
           mkdir -p deploy/logs
-          mv tmp/twister-out deploy/logs/
-
-  deploy:
-    runs-on: ubuntu-22.04
-    needs: build
-    if: github.event_name != 'pull_request'
-    permissions:
-      pages: write
-      id-token: write
-    steps:
-      - name: Deploy ZTest Logs to GitHub Pages
-        uses: actions/deploy-pages@v4
-        with:
-          path: deploy/logs
+          if [ -d "tmp/twister-out" ]; then
+            mv tmp/twister-out deploy/logs/
+          else
+            echo "No Twister output to move"
+          fi
