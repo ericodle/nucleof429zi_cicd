@@ -44,8 +44,7 @@ jobs:
       - name: Run Check tests
         working-directory: nucleof429zi_cicd/build
         run: |
-          ./zephyr/zephyr.elf > test_output.log
-          cat test_output.log
+          ./zephyr/zephyr.elf
 
       - name: Upload Check Test Logs
         if: always()
