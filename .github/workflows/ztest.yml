@@ -56,3 +56,22 @@ jobs:
           name: twister-test-results-${{ matrix.os }}
           path: |
             tmp/twister-out/**/*
+
+      - name: Upload Logs for Deployment
+        if: always()
+        run: |
+          mkdir -p deploy/logs
+          mv tmp/twister-out deploy/logs/
+
+  deploy:
+    runs-on: ubuntu-22.04
+    needs: build
+    if: github.event_name != 'pull_request'
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - name: Deploy ZTest Logs to GitHub Pages
+        uses: actions/deploy-pages@v4
+        with:
+          path: deploy/logs
