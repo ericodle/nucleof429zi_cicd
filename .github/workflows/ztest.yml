@@ -42,6 +42,10 @@ jobs:
           EXTRA_TWISTER_FLAGS="--short-build-path -O /tmp/twister-out"
           west twister -T app -v --inline-logs --integration $EXTRA_TWISTER_FLAGS
 
+      - name: Create Twister Output Directory
+        run: |
+          mkdir -p tmp/twister-out  
+
       - name: Run Twister Tests
         working-directory: nucleof429zi_cicd
         shell: bash
