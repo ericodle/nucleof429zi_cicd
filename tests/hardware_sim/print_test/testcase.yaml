@@ -1,5 +1,5 @@
 tests:
-  integration.confirmation_tests:
+  hardware_sim.print_test:
     build_only: false
     platform_allow:
       - qemu_cortex_m3
