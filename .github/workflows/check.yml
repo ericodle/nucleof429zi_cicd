@@ -1,0 +1,45 @@
+name: Check Tests CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  check-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Zephyr SDK
+      run: |
+        sudo apt update
+        sudo apt install -y cmake ninja-build gperf ccache dfu-util \
+          device-tree-compiler wget xz-utils file python3-pip \
+          python3-setuptools python3-tk python3-wheel \
+          python3-pyelftools python3-git python3-ply \
+          python3-magic python3-packaging
+        pip3 install --user west
+        echo "$HOME/.local/bin" >> $GITHUB_PATH
+        west init ~/zephyrproject
+        cd ~/zephyrproject
+        west update
+        west zephyr-export
+        pip3 install -r zephyr/scripts/requirements.txt
+
+    - name: Install Check (C Unit Testing Framework)
+      run: |
+        sudo apt install check
+
+    - name: Build Check tests
+      run: |
+        cd tests/check_tests
+        west build -b native_posix --source-dir src
+
+    - name: Run Check tests
+      run: |
+        cd tests/check_tests/build
+        ./test_check
