@@ -1,4 +1,4 @@
-// morse.c
+// app/src/morse.c
 #include "morse.h"
 
 #define LED0_NODE DT_ALIAS(led0)

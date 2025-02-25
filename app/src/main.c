@@ -1,4 +1,4 @@
-// main.c
+// app/src/main.c
 #include <stdio.h>
 #include <zephyr/kernel.h>
 #include <zephyr/drivers/gpio.h>

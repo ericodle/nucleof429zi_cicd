@@ -1,4 +1,4 @@
-// morse.h
+// app/src/morse.h
 #ifndef MORSE_H
 #define MORSE_H
 
