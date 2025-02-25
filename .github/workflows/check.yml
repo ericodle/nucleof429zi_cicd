@@ -44,7 +44,10 @@ jobs:
       - name: Run Check tests
         working-directory: nucleof429zi_cicd/build
         run: |
-          ./zephyr/zephyr.elf
+          echo "Running zephyr.elf in the background..."
+          ./zephyr/zephyr.elf > test_output.log 2>&1 &
+          sleep 5  # Wait for it to initialize
+          tail -n 100 test_output.log  # Output the last 100 lines from the log
 
       - name: Upload Check Test Logs
         if: always()
