@@ -31,13 +31,6 @@ jobs:
         with:
           python-version: 3.11
 
-      # Setup Zephyr project
-      - name: Setup Zephyr project
-        uses: zephyrproject-rtos/action-zephyr-setup@v1
-        with:
-          app-path: nucleof429zi_cicd
-          toolchains: arm-zephyr-eabi
-
       - name: Reset West workspace
         run: |
           WEST_DIR="$PWD/nucleof429zi_cicd/.west"
@@ -46,6 +39,16 @@ jobs:
             echo "Workspace detected. Deleting and reinitializing west workspace."
             rm -rf "$WEST_DIR"  # Clean out the existing .west directory
           fi
+          echo "Initializing fresh workspace."
+          west init -l nucleof429zi_cicd --mf nucleof429zi_cicd/west.yml
+
+
+      # Setup Zephyr project
+      - name: Setup Zephyr project
+        uses: zephyrproject-rtos/action-zephyr-setup@v1
+        with:
+          app-path: nucleof429zi_cicd
+          toolchains: arm-zephyr-eabi
 
       # Step to ensure the twister-out directory exists
       - name: Ensure twister-out directory exists
