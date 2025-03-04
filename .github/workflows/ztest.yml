@@ -35,15 +35,20 @@ jobs:
           app-path: nucleof429zi_cicd
           toolchains: arm-zephyr-eabi
 
-      # Clean up the previous workspace if .west directory exists
-      - name: Clean up Zephyr workspace
+      - name: Clean previous west initialization
         run: |
           if [ -d "/home/eo/actions-runner/_work/nucleof429zi_cicd/nucleof429zi_cicd/.west" ]; then
-            echo "Cleaning up existing Zephyr workspace..."
             rm -rf /home/eo/actions-runner/_work/nucleof429zi_cicd/nucleof429zi_cicd/.west
-          else
-            echo "No existing Zephyr workspace found."
           fi
+            # Clean up the previous workspace if .west directory exists
+            - name: Clean up Zephyr workspace
+              run: |
+                if [ -d "/home/eo/actions-runner/_work/nucleof429zi_cicd/nucleof429zi_cicd/.west" ]; then
+                  echo "Cleaning up existing Zephyr workspace..."
+                  rm -rf /home/eo/actions-runner/_work/nucleof429zi_cicd/nucleof429zi_cicd/.west
+                else
+                  echo "No existing Zephyr workspace found."
+                fi
 
       # Initialize Zephyr workspace
       - name: Initialize Zephyr workspace
