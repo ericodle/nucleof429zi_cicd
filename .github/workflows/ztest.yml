@@ -44,7 +44,8 @@ jobs:
       # Initialize Zephyr workspace
       - name: Initialize Zephyr workspace
         run: |
-          if [ ! -d "/home/eo/actions-runner/_work/nucleof429zi_cicd/nucleof429zi_cicd/.west" ]; then
+          WEST_DIR="/home/eo/actions-runner/_work/nucleof429zi_cicd/nucleof429zi_cicd/.west"
+          if [ ! -d "$WEST_DIR" ]; then
             echo "Initializing Zephyr workspace..."
             west init -l nucleof429zi_cicd --mf west.yml
           else
