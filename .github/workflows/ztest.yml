@@ -17,7 +17,6 @@ jobs:
       matrix:
         os: [ubuntu-22.04]
     runs-on: self-hosted
-    timeout-minutes: 5  
 
     steps:
       - name: Checkout repository
@@ -36,30 +35,24 @@ jobs:
           app-path: nucleof429zi_cicd
           toolchains: arm-zephyr-eabi
 
-      - name: Ensure twister-out directory exists
-        run: |
-          mkdir -p $PWD/twister-out
-
       - name: Build firmware
         working-directory: nucleof429zi_cicd
         shell: bash
-        timeout-minutes: 5  
         run: |
-          EXTRA_TWISTER_FLAGS="--short-build-path -O $PWD/twister-out"
+          EXTRA_TWISTER_FLAGS="--short-build-path -O /tmp/twister-out"
           west twister -T app -v --inline-logs --integration $EXTRA_TWISTER_FLAGS
 
       - name: Run Twister Tests
         working-directory: nucleof429zi_cicd
         shell: bash
-        timeout-minutes: 5  
         run: |
-          EXTRA_TWISTER_FLAGS="--verbose --short-build-path -O $PWD/twister-out"
+          EXTRA_TWISTER_FLAGS=" --verbose --short-build-path -O /tmp/twister-out"
           west twister -T tests -v --inline-logs --integration $EXTRA_TWISTER_FLAGS
 
       - name: Check Twister Output Files
         run: |
           echo "Listing twister-out directory:"
-          ls -R $PWD/twister-out
+          ls -R /tmp/twister-out
 
       - name: Upload Twister Test Results
         if: always()
@@ -67,15 +60,14 @@ jobs:
         with:
           name: twister-test-results-${{ matrix.os }}
           path: |
-            $PWD/twister-out/**/*
+            /twister-out/**/*
 
       - name: Upload Logs for Deployment
         if: always()
         run: |
           mkdir -p deploy/logs
-          if [ -d "$PWD/twister-out" ]; then
-            mv $PWD/twister-out deploy/logs/
+          if [ -d "/tmp/twister-out" ]; then
+            mv /tmp/twister-out deploy/logs/
           else
             echo "No Twister output to move"
           fi
-
