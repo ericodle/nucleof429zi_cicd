@@ -35,14 +35,11 @@ jobs:
           app-path: nucleof429zi_cicd
           toolchains: arm-zephyr-eabi
 
-      - name: Check if west is initialized
+      - name: Clean previous west initialization
         run: |
-          if [ ! -d "/home/eo/actions-runner/_work/nucleof429zi_cicd/nucleof429zi_cicd/.west" ]; then
-            west init -l nucleof429zi_cicd --mf west.yml
-          else
-            echo "West is already initialized, skipping init."
+          if [ -d "/home/eo/actions-runner/_work/nucleof429zi_cicd/nucleof429zi_cicd/.west" ]; then
+            rm -rf /home/eo/actions-runner/_work/nucleof429zi_cicd/nucleof429zi_cicd/.west
           fi
-        
 
       # Initialize Zephyr workspace
       - name: Initialize Zephyr workspace
