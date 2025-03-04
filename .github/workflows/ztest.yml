@@ -35,6 +35,32 @@ jobs:
           app-path: nucleof429zi_cicd
           toolchains: arm-zephyr-eabi
 
+      # Step to clean up previous workspace if .west exists
+      - name: Clean up previous workspace
+        run: |
+          if [ -d "/home/eo/actions-runner/_work/nucleof429zi_cicd/nucleof429zi_cicd/.west" ]; then
+            echo "Cleaning up existing workspace..."
+            rm -rf /home/eo/actions-runner/_work/nucleof429zi_cicd/nucleof429zi_cicd/.west
+          else
+            echo "No existing workspace found, skipping cleanup."
+          fi
+
+      # Step to initialize the Zephyr workspace if it hasn't been initialized
+      - name: Initialize Zephyr workspace
+        run: |
+          if [ ! -d "/home/eo/actions-runner/_work/nucleof429zi_cicd/nucleof429zi_cicd/.west" ]; then
+            echo "Initializing Zephyr workspace..."
+            west init -l nucleof429zi_cicd --mf west.yml
+          else
+            echo "Workspace already initialized, skipping west init."
+          fi
+
+      # Step to ensure the twister-out directory exists
+      - name: Ensure twister-out directory exists
+        run: |
+          mkdir -p /tmp/twister-out
+
+      # Step to build the firmware
       - name: Build firmware
         working-directory: nucleof429zi_cicd
         shell: bash
@@ -42,6 +68,7 @@ jobs:
           EXTRA_TWISTER_FLAGS="--short-build-path -O /tmp/twister-out"
           west twister -T app -v --inline-logs --integration $EXTRA_TWISTER_FLAGS
 
+      # Step to run Twister tests
       - name: Run Twister Tests
         working-directory: nucleof429zi_cicd
         shell: bash
@@ -49,19 +76,22 @@ jobs:
           EXTRA_TWISTER_FLAGS=" --verbose --short-build-path -O /tmp/twister-out"
           west twister -T tests -v --inline-logs --integration $EXTRA_TWISTER_FLAGS
 
+      # Step to check Twister output files
       - name: Check Twister Output Files
         run: |
           echo "Listing twister-out directory:"
           ls -R /tmp/twister-out
 
+      # Step to upload Twister test results as artifacts
       - name: Upload Twister Test Results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: twister-test-results-${{ matrix.os }}
           path: |
-            /twister-out/**/*
+            /tmp/twister-out/**/*
 
+      # Step to upload logs for deployment
       - name: Upload Logs for Deployment
         if: always()
         run: |
