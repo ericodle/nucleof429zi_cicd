@@ -19,16 +19,19 @@ jobs:
     runs-on: self-hosted
 
     steps:
+      # Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           path: nucleof429zi_cicd
 
+      # Set up Python
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: 3.11
 
+      # Setup Zephyr project
       - name: Setup Zephyr project
         uses: zephyrproject-rtos/action-zephyr-setup@v1
         with:
@@ -38,15 +41,17 @@ jobs:
       # Clean previous west initialization
       - name: Clean previous west initialization
         run: |
-          if [ -d "$PWD/nucleof429zi_cicd/.west" ]; then
+          WEST_DIR="$PWD/nucleof429zi_cicd/.west"
+          if [ -d "$WEST_DIR" ]; then
             echo "Removing existing .west directory..."
-            rm -rf $PWD/nucleof429zi_cicd/.west
+            rm -rf "$WEST_DIR"
           fi
 
       # Initialize Zephyr workspace
       - name: Initialize Zephyr workspace
         run: |
-          if [ ! -d "$PWD/nucleof429zi_cicd/.west" ]; then
+          WEST_DIR="$PWD/nucleof429zi_cicd/.west"
+          if [ ! -d "$WEST_DIR" ]; then
             echo "Initializing Zephyr workspace..."
             west init -l nucleof429zi_cicd --mf west.yml
           else
