@@ -76,6 +76,13 @@ jobs:
           EXTRA_TWISTER_FLAGS=" --verbose --short-build-path -O /tmp/twister-out"
           west twister -T tests -v --inline-logs --integration $EXTRA_TWISTER_FLAGS
 
+      # Save logs locally
+      - name: Save Twister Logs Locally
+        run: |
+          mkdir -p ~/twister_logs
+          echo "Saving Twister logs locally..."
+          cp -r /tmp/twister-out ~/twister_logs/
+
       # Check Twister output files
       - name: Check Twister Output Files
         run: |
