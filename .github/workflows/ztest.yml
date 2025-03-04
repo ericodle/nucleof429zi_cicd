@@ -38,6 +38,15 @@ jobs:
           app-path: nucleof429zi_cicd
           toolchains: arm-zephyr-eabi
 
+      - name: Reset West workspace
+        run: |
+          WEST_DIR="$PWD/nucleof429zi_cicd/.west"
+          echo "Checking if west workspace needs reset..."
+          if [ -d "$WEST_DIR" ]; then
+            echo "Workspace detected. Deleting and reinitializing west workspace."
+            rm -rf "$WEST_DIR"  # Clean out the existing .west directory
+          fi
+
       # Step to ensure the twister-out directory exists
       - name: Ensure twister-out directory exists
         run: |
