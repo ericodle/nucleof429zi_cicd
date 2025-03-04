@@ -38,18 +38,17 @@ jobs:
           app-path: nucleof429zi_cicd
           toolchains: arm-zephyr-eabi
 
-      # Reset West workspace (without deleting .west)
+      # Reset West workspace (delete and reinitialize if .west exists)
       - name: Reset West workspace
         run: |
           WEST_DIR="$PWD/nucleof429zi_cicd/.west"
           echo "Checking if west workspace needs reset..."
           if [ -d "$WEST_DIR" ]; then
-            echo "Workspace detected. Resetting west configuration."
-            west update -l nucleof429zi_cicd --mf west.yml --force
-          else
-            echo "No existing west workspace found. Initializing fresh workspace."
-            west init -l nucleof429zi_cicd --mf west.yml
+            echo "Workspace detected. Deleting and reinitializing west workspace."
+            rm -rf "$WEST_DIR"  # Clean out the existing .west directory
           fi
+          echo "Initializing fresh workspace."
+          west init -l nucleof429zi_cicd --mf nucleof429zi_cicd/west.yml
 
       # Step to ensure the twister-out directory exists
       - name: Ensure twister-out directory exists
@@ -64,7 +63,7 @@ jobs:
           EXTRA_TWISTER_FLAGS="--short-build-path -O /tmp/twister-out"
           west twister -T app -v --inline-logs --integration $EXTRA_TWISTER_FLAGS
 
-      # Run Twister tests
+      # Run Twister Tests
       - name: Run Twister Tests
         working-directory: nucleof429zi_cicd
         shell: bash
