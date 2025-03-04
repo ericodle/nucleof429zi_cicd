@@ -35,9 +35,11 @@ jobs:
           app-path: nucleof429zi_cicd
           toolchains: arm-zephyr-eabi
 
+      # Clean previous west initialization and reinitialize workspace if needed
       - name: Clean previous west initialization
         run: |
           if [ -d "$PWD/nucleof429zi_cicd/.west" ]; then
+            echo "Cleaning previous west initialization..."
             rm -rf "$PWD/nucleof429zi_cicd/.west"
           fi
 
