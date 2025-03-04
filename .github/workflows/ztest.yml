@@ -19,7 +19,7 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: Clean up previous test directory
+      - name: Clean up previous test directory (keep .west)
         run: |
           echo "Cleaning up previous test artifacts..."
           
@@ -27,15 +27,15 @@ jobs:
           WORK_DIR=$PWD
           TWISTER_OUT="$WORK_DIR/twister-out"
 
-          # Remove twister-out directory if it exists
+          # Remove only twister-out directory if it exists
           if [ -d "$TWISTER_OUT" ]; then
             echo "Removing $TWISTER_OUT..."
             rm -rf "$TWISTER_OUT"
           fi
 
-          # Remove everything in the workspace directory
-          echo "Removing all files in $WORK_DIR..."
-          rm -rf "$WORK_DIR"/*
+          # Remove all files EXCEPT .west
+          echo "Cleaning up workspace but keeping .west..."
+          find "$WORK_DIR" -mindepth 1 -not -name '.west' -exec rm -rf {} +
 
       - name: Checkout repository
         uses: actions/checkout@v4
