@@ -35,23 +35,18 @@ jobs:
           app-path: nucleof429zi_cicd
           toolchains: arm-zephyr-eabi
 
-      # Clean previous west initialization and reinitialize workspace if needed
+      # Clean previous west initialization
       - name: Clean previous west initialization
         run: |
-          echo "Checking if .west exists"
           if [ -d "$PWD/nucleof429zi_cicd/.west" ]; then
             echo "Removing existing .west directory..."
-            rm -rf "$PWD/nucleof429zi_cicd/.west"
-          else
-            echo ".west directory does not exist, skipping cleanup."
+            rm -rf $PWD/nucleof429zi_cicd/.west
           fi
 
       # Initialize Zephyr workspace
       - name: Initialize Zephyr workspace
         run: |
-          echo "Checking if Zephyr workspace is initialized..."
-          WEST_DIR="$PWD/nucleof429zi_cicd/.west"
-          if [ ! -d "$WEST_DIR" ]; then
+          if [ ! -d "$PWD/nucleof429zi_cicd/.west" ]; then
             echo "Initializing Zephyr workspace..."
             west init -l nucleof429zi_cicd --mf west.yml
           else
