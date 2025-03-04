@@ -37,14 +37,14 @@ jobs:
 
       - name: Clean previous west initialization
         run: |
-          if [ -d "/home/eo/actions-runner/_work/nucleof429zi_cicd/nucleof429zi_cicd/.west" ]; then
-            rm -rf /home/eo/actions-runner/_work/nucleof429zi_cicd/nucleof429zi_cicd/.west
+          if [ -d "$PWD/nucleof429zi_cicd/.west" ]; then
+            rm -rf "$PWD/nucleof429zi_cicd/.west"
           fi
 
       # Initialize Zephyr workspace
       - name: Initialize Zephyr workspace
         run: |
-          WEST_DIR="/home/eo/actions-runner/_work/nucleof429zi_cicd/nucleof429zi_cicd/.west"
+          WEST_DIR="$PWD/nucleof429zi_cicd/.west"
           if [ ! -d "$WEST_DIR" ]; then
             echo "Initializing Zephyr workspace..."
             west init -l nucleof429zi_cicd --mf west.yml
