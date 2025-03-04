@@ -1,0 +1,100 @@
+name: ZTests Run Locally Using Ubuntu 22
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04]
+    runs-on: self-hosted
+
+    steps:
+      - name: Clean up previous test directory (keep .west)
+        run: |
+          echo "Cleaning up previous test artifacts..."
+          
+          # Define workspace directory
+          WORK_DIR=$PWD
+          TWISTER_OUT="$WORK_DIR/twister-out"
+
+          # Remove only twister-out directory if it exists
+          if [ -d "$TWISTER_OUT" ]; then
+            echo "Removing $TWISTER_OUT..."
+            rm -rf "$TWISTER_OUT"
+          fi
+
+          # Remove all files EXCEPT .west
+          echo "Cleaning up workspace but keeping .west..."
+          find "$WORK_DIR" -mindepth 1 -not -name '.west' -exec rm -rf {} +
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          path: nucleof429zi_cicd
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Setup Zephyr project
+        uses: zephyrproject-rtos/action-zephyr-setup@v1
+        with:
+          app-path: nucleof429zi_cicd
+          toolchains: arm-zephyr-eabi
+
+      - name: Build firmware
+        working-directory: nucleof429zi_cicd
+        shell: bash
+        run: |
+          TWISTER_OUT=$PWD/twister-out
+          mkdir -p "$TWISTER_OUT"
+
+          EXTRA_TWISTER_FLAGS="--short-build-path -O $TWISTER_OUT"
+          west twister -T app -v --inline-logs --integration $EXTRA_TWISTER_FLAGS
+
+      - name: Run Twister Tests
+        working-directory: nucleof429zi_cicd
+        shell: bash
+        run: |
+          TWISTER_OUT=$PWD/twister-out
+          mkdir -p "$TWISTER_OUT"
+
+          EXTRA_TWISTER_FLAGS="--verbose --short-build-path -O $TWISTER_OUT"
+          west twister -T tests -v --inline-logs --integration $EXTRA_TWISTER_FLAGS
+
+      - name: Check Twister Output Files
+        run: |
+          TWISTER_OUT=$PWD/twister-out
+          echo "Listing twister-out directory:"
+          ls -R "$TWISTER_OUT" || echo "No output found"
+
+      - name: Upload Twister Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: twister-test-results-${{ matrix.os }}
+          path: $PWD/twister-out/**/*
+          
+      - name: Upload Logs for Deployment
+        if: always()
+        run: |
+          DEPLOY_DIR=$PWD/deploy/logs
+          TWISTER_OUT=$PWD/twister-out
+          mkdir -p "$DEPLOY_DIR"
+
+          if [ -d "$TWISTER_OUT" ]; then
+            mv "$TWISTER_OUT" "$DEPLOY_DIR/"
+          else
+            echo "No Twister output to move"
+          fi

@@ -1,4 +1,4 @@
-name: ZTests Run Locally
+name: ZTests Run Locally Using Debian 12
 
 on:
   push:
@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-22.04]
+        os: [debian-12] 
     runs-on: self-hosted
 
     steps:
