@@ -24,7 +24,7 @@ jobs:
           echo "Cleaning up previous test artifacts..."
           
           # Define workspace directory
-          WORK_DIR=~/actions-runner/_work/nucleof429zi_cicd
+          WORK_DIR=$PWD
           TWISTER_OUT="$WORK_DIR/twister-out"
 
           # Remove twister-out directory if it exists
@@ -34,10 +34,8 @@ jobs:
           fi
 
           # Remove everything in the workspace directory
-          if [ -d "$WORK_DIR" ]; then
-            echo "Removing all files in $WORK_DIR..."
-            rm -rf "$WORK_DIR"/*
-          fi
+          echo "Removing all files in $WORK_DIR..."
+          rm -rf "$WORK_DIR"/*
 
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -59,7 +57,7 @@ jobs:
         working-directory: nucleof429zi_cicd
         shell: bash
         run: |
-          TWISTER_OUT=~/actions-runner/_work/nucleof429zi_cicd/twister-out
+          TWISTER_OUT=$PWD/twister-out
           mkdir -p "$TWISTER_OUT"
 
           EXTRA_TWISTER_FLAGS="--short-build-path -O $TWISTER_OUT"
@@ -69,7 +67,7 @@ jobs:
         working-directory: nucleof429zi_cicd
         shell: bash
         run: |
-          TWISTER_OUT=~/actions-runner/_work/nucleof429zi_cicd/twister-out
+          TWISTER_OUT=$PWD/twister-out
           mkdir -p "$TWISTER_OUT"
 
           EXTRA_TWISTER_FLAGS="--verbose --short-build-path -O $TWISTER_OUT"
@@ -77,7 +75,7 @@ jobs:
 
       - name: Check Twister Output Files
         run: |
-          TWISTER_OUT=~/actions-runner/_work/nucleof429zi_cicd/twister-out
+          TWISTER_OUT=$PWD/twister-out
           echo "Listing twister-out directory:"
           ls -R "$TWISTER_OUT" || echo "No output found"
 
@@ -86,13 +84,13 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: twister-test-results-${{ matrix.os }}
-          path: ~/actions-runner/_work/nucleof429zi_cicd/twister-out/**/*
+          path: $PWD/twister-out/**/*
           
       - name: Upload Logs for Deployment
         if: always()
         run: |
-          DEPLOY_DIR=deploy/logs
-          TWISTER_OUT=~/actions-runner/_work/nucleof429zi_cicd/twister-out
+          DEPLOY_DIR=$PWD/deploy/logs
+          TWISTER_OUT=$PWD/twister-out
           mkdir -p "$DEPLOY_DIR"
 
           if [ -d "$TWISTER_OUT" ]; then
