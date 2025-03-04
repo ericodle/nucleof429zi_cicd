@@ -103,8 +103,10 @@ jobs:
         if: always()
         run: |
           mkdir -p deploy/logs
+          rm -rf deploy/logs/*  # Clean up existing contents
           if [ -d "/tmp/twister-out" ]; then
-            mv /tmp/twister-out deploy/logs/
+            mv /tmp/twister-out/* deploy/logs/
           else
             echo "No Twister output to move"
           fi
+
