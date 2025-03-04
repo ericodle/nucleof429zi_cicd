@@ -1,4 +1,4 @@
-name: ZTest Tests
+name: ZTests with Ubuntu 22 Environment
 
 on:
   push:
