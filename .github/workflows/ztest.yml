@@ -38,14 +38,18 @@ jobs:
       # Clean previous west initialization and reinitialize workspace if needed
       - name: Clean previous west initialization
         run: |
+          echo "Checking if .west exists"
           if [ -d "$PWD/nucleof429zi_cicd/.west" ]; then
-            echo "Cleaning previous west initialization..."
+            echo "Removing existing .west directory..."
             rm -rf "$PWD/nucleof429zi_cicd/.west"
+          else
+            echo ".west directory does not exist, skipping cleanup."
           fi
 
       # Initialize Zephyr workspace
       - name: Initialize Zephyr workspace
         run: |
+          echo "Checking if Zephyr workspace is initialized..."
           WEST_DIR="$PWD/nucleof429zi_cicd/.west"
           if [ ! -d "$WEST_DIR" ]; then
             echo "Initializing Zephyr workspace..."
