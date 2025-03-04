@@ -15,15 +15,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest]  # Use Ubuntu instead of Debian
-
-    runs-on: self-hosted  # Use the self-hosted runner (you can also specify a label like self-hosted or your custom label)
+        os: [ubuntu-latest]  # You can still keep this for clarity, though it's not strictly necessary
+    runs-on: [self-hosted, ubuntu]  # Use the self-hosted runner without a container
 
     steps:
       - name: Install dependencies
         run: |
           sudo apt update && sudo apt install -y python3 python3-pip git cmake ninja-build gperf \
-          ccache dfu-util dtc libffi-dev libssl-dev file wget xz-utils \
+          ccache dfu-util device-tree-compiler libffi-dev libssl-dev file wget xz-utils \
           make gcc gcc-multilib g++-multilib libsdl2-dev python3-dev \
           python3-setuptools python3-tk python3-wheel xz-utils unzip \
           tar curl sudo udev
