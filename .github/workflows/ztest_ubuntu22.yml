@@ -25,15 +25,8 @@ jobs:
           
           # Define workspace directory
           WORK_DIR=$PWD
-          TWISTER_OUT="$WORK_DIR/twister-out"
-
-          # Remove only twister-out directory if it exists
-          if [ -d "$TWISTER_OUT" ]; then
-            echo "Removing $TWISTER_OUT..."
-            rm -rf "$TWISTER_OUT"
-          fi
-
-          # Remove all files EXCEPT .west
+      
+          # Remove all files and directories in the workspace, except .west
           echo "Cleaning up workspace but keeping .west..."
           find "$WORK_DIR" -mindepth 1 -not -name '.west' -exec rm -rf {} +
 
