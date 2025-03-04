@@ -1,4 +1,4 @@
-name: ZTests with Ubuntu 22 Environment
+name: ZTests Run Locally
 
 on:
   push:
@@ -19,31 +19,22 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      # Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           path: nucleof429zi_cicd
 
-      # Set up Python
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: 3.11
+          python-version: "3.11"
 
-      # Setup Zephyr project
       - name: Setup Zephyr project
         uses: zephyrproject-rtos/action-zephyr-setup@v1
         with:
           app-path: nucleof429zi_cicd
           toolchains: arm-zephyr-eabi
 
-      # Step to ensure the twister-out directory exists
-      - name: Ensure twister-out directory exists
-        run: |
-          mkdir -p /tmp/twister-out
-
-      # Build firmware
       - name: Build firmware
         working-directory: nucleof429zi_cicd
         shell: bash
@@ -51,46 +42,31 @@ jobs:
           EXTRA_TWISTER_FLAGS="--short-build-path -O /tmp/twister-out"
           west twister -T app -v --inline-logs --integration $EXTRA_TWISTER_FLAGS
 
-      # Run Twister Tests
       - name: Run Twister Tests
         working-directory: nucleof429zi_cicd
         shell: bash
         run: |
-          EXTRA_TWISTER_FLAGS=" --verbose --short-build-path -O /tmp/twister-out"
+          EXTRA_TWISTER_FLAGS="--verbose --short-build-path -O /tmp/twister-out"
           west twister -T tests -v --inline-logs --integration $EXTRA_TWISTER_FLAGS
 
-      # Save logs locally
-      - name: Save Twister Logs Locally
-        run: |
-          mkdir -p ~/twister_logs
-          echo "Saving Twister logs locally..."
-          cp -r /tmp/twister-out ~/twister_logs/
-
-      # Check Twister output files
       - name: Check Twister Output Files
         run: |
           echo "Listing twister-out directory:"
-          ls -R /tmp/twister-out
+          ls -R /tmp/twister-out || echo "No output found"
 
-      # Upload Twister test results
       - name: Upload Twister Test Results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: twister-test-results-${{ matrix.os }}
-          path: |
-            /tmp/twister-out/**/*
-
-      # Upload logs for deployment
+          path: /tmp/twister-out/**/*
+          
       - name: Upload Logs for Deployment
         if: always()
         run: |
           mkdir -p deploy/logs
-          rm -rf deploy/logs/twister-out  # Remove the existing twister-out directory
-          mkdir -p deploy/logs/twister-out  # Create a fresh directory for new logs
           if [ -d "/tmp/twister-out" ]; then
-            mv /tmp/twister-out deploy/logs/twister-out/
+            mv /tmp/twister-out deploy/logs/
           else
             echo "No Twister output to move"
           fi
-
