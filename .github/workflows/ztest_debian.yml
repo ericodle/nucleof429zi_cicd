@@ -19,23 +19,21 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: Clean up previous test directory (keep .west)
+      - name: Clean up test directory but preserve WORK_DIR
         run: |
-          echo "Cleaning up previous test artifacts..."
+          echo "Cleaning up test artifacts..."
           
-          # Define workspace directory
-          WORK_DIR=$PWD
-          TWISTER_OUT="$WORK_DIR/twister-out"
+          WORK_DIR="/home/eo/actions-runner/_work/nucleof429zi_cicd/nucleof429zi_cicd"
 
-          # Remove only twister-out directory if it exists
-          if [ -d "$TWISTER_OUT" ]; then
-            echo "Removing $TWISTER_OUT..."
-            rm -rf "$TWISTER_OUT"
+          if [ -z "$WORK_DIR" ] || [ ! -d "$WORK_DIR" ]; then
+            echo "Error: WORK_DIR is not set or does not exist!"
+            exit 1
           fi
 
-          # Remove all files EXCEPT .west
-          echo "Cleaning up workspace but keeping .west..."
-          find "$WORK_DIR" -mindepth 1 -not -name '.west' -exec rm -rf {} +
+          echo "Removing all contents inside $WORK_DIR..."
+          rm -rf "$WORK_DIR"/* "$WORK_DIR"/.[!.]* "$WORK_DIR"/..?*
+
+          echo "Cleanup complete."
 
       - name: Checkout repository
         uses: actions/checkout@v4
