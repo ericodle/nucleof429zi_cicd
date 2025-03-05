@@ -1,16 +1,19 @@
 name: CI
-
-on: [push]
-
+on:
+  push:
+    branches: [ main ]
 jobs:
-  build:
-    runs-on: self-hosted
+  container-test-job:
+    runs-on: ubuntu-latest
+    container:
+      image: node:18
+      env:
+        NODE_ENV: development
+      ports:
+        - 80
+      volumes:
+        - my_docker_volume:/volume_mount
+      options: --cpus 1
     steps:
-    - uses: actions/checkout@v5
-    - name: Install Archlinux
-      run: curl -L https://github.com/zaoqi/github-actions-archlinux/raw/master/install.sh | sh
-    - name: Docker hello-world
-      run: |
-        sudo pacman --noconfirm -Syu docker
-        sudo systemctl start docker
-        docker run --rm hello-world
+      - name: Check for dockerenv file
+        run: (ls /.dockerenv && echo Found dockerenv) || (echo No dockerenv)
