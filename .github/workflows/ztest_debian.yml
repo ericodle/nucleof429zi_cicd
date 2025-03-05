@@ -43,7 +43,9 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11.2"
+          python-version: "3.11"
+          check-latest: false
+          update-environment: true
 
       - name: Setup Zephyr project
         uses: zephyrproject-rtos/action-zephyr-setup@v1
