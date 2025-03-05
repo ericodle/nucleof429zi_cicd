@@ -40,6 +40,41 @@ jobs:
         with:
           path: nucleof429zi_cicd
 
+      - name: Install dependencies for Python 3.11
+        run: |
+          sudo apt update
+          sudo apt install -y \
+            build-essential \
+            zlib1g-dev \
+            libncurses5-dev \
+            libgdbm-dev \
+            libnss3-dev \
+            libssl-dev \
+            libreadline-dev \
+            libffi-dev \
+            curl \
+            wget \
+            make \
+            libbz2-dev \
+            liblzma-dev \
+            tk-dev
+
+      - name: Download and Install Python 3.11
+        run: |
+          # Download Python 3.11 source
+          wget https://www.python.org/ftp/python/3.11.2/Python-3.11.2.tgz
+          tar -xvf Python-3.11.2.tgz
+          cd Python-3.11.2
+          
+          # Configure and install Python
+          ./configure --enable-optimizations
+          make -j 4
+          sudo make altinstall
+
+      - name: Verify Python 3.11 Installation
+        run: |
+          python3.11 --version
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
