@@ -19,16 +19,24 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: Clean up previous test directory (keep .west)
+      - name: Initialize Zephyr project (if not already initialized)
         run: |
-          echo "Cleaning up previous test artifacts..."
+          echo "Checking if Zephyr project is already initialized..."
           
-          # Define workspace directory
+          # Define the workspace directory
           WORK_DIR=$PWD
+          WEST_DIR="$WORK_DIR/nucleof429zi_cicd/.west"
       
-          # Remove all files and directories in the workspace, except .west
-          echo "Cleaning up workspace but keeping .west..."
-          find "$WORK_DIR" -mindepth 1 -not -name '.west' -exec rm -rf {} +
+          # Only run west init if the .west directory does not exist
+          if [ ! -d "$WEST_DIR" ]; then
+            echo "Initializing Zephyr project..."
+            west init -l nucleof429zi_cicd --mf west.yml
+          else
+            echo "Zephyr project already initialized, skipping initialization."
+          fi
+      
+          # Run west update after initialization
+          west update -o=--depth=1 -n
 
       - name: Checkout repository
         uses: actions/checkout@v4
