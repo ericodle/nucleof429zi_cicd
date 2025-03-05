@@ -1,4 +1,4 @@
-name: ZTests Run Locally Using Ubuntu 22 & 24
+name: ZTests Run Locally Using Ubuntu
 
 on:
   push:
