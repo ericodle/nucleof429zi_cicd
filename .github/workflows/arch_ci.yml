@@ -4,16 +4,16 @@ on:
     branches: [ main ]
 jobs:
   container-test-job:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted  # Ensure Docker is available on this machine
     container:
-      image: node:18
-      env:
-        NODE_ENV: development
+      image: ubuntu:20.04  # Using the Ubuntu 20.04 Docker image
       ports:
-        - 80
+        - 80  # Expose port 80 if needed
       volumes:
-        - my_docker_volume:/volume_mount
-      options: --cpus 1
+        - $(pwd):/workspace  # Mount the current directory into the container's /workspace directory
+      options: --cpus 1  # Allocate 1 CPU to the container
     steps:
       - name: Check for dockerenv file
-        run: (ls /.dockerenv && echo Found dockerenv) || (echo No dockerenv)
+        run: |
+          # Check if the /.dockerenv file exists inside the container to confirm it's a Docker container
+          (ls /.dockerenv && echo Found dockerenv) || (echo No dockerenv)
