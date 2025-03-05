@@ -1,4 +1,4 @@
-name: ZTests Run Locally Using Ubuntu 22
+name: ZTests Run Locally Using Ubuntu 22 & 24
 
 on:
   push:
@@ -15,26 +15,25 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-22.04]
+        python-version: ['3.10', '3.11', '3.12', '3.13']
+        os: [ubuntu-22.04, ubuntu-24.04]
+
     runs-on: self-hosted
 
     steps:
-      - name: Clean up test directory but preserve nucleof429zi_cicd/
+      - name: Clean up test directory but preserve WORK_DIR
         run: |
           echo "Cleaning up test artifacts..."
+          
+          WORK_DIR="/home/eo/actions-runner/_work/nucleof429zi_cicd/nucleof429zi_cicd"
 
-          # Define the repository directory
-          REPO_DIR="/home/eo/actions-runner/_work/nucleof429zi_cicd/nucleof429zi_cicd"
-
-          # Ensure REPO_DIR exists before proceeding
-          if [ ! -d "$REPO_DIR" ]; then
-            echo "Error: REPO_DIR does not exist! Creating it..."
-            mkdir -p "$REPO_DIR"
+          if [ -z "$WORK_DIR" ] || [ ! -d "$WORK_DIR" ]; then
+            echo "Error: WORK_DIR is not set or does not exist!"
+            exit 1
           fi
 
-          # Remove all contents inside REPO_DIR but keep the directory itself
-          echo "Removing all contents inside $REPO_DIR..."
-          find "$REPO_DIR" -mindepth 1 -delete
+          echo "Removing all contents inside $WORK_DIR..."
+          rm -rf "$WORK_DIR"/* "$WORK_DIR"/.[!.]* "$WORK_DIR"/..?*
 
           echo "Cleanup complete."
 
@@ -46,7 +45,8 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: ${{ matrix.python-version }}
+          check-latest: true
 
       - name: Setup Zephyr project
         uses: zephyrproject-rtos/action-zephyr-setup@v1
@@ -84,9 +84,9 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: twister-test-results-${{ matrix.os }}
+          name: twister-test-results-${{ matrix.os }}-python-${{ matrix.python-version }}
           path: $PWD/twister-out/**/*
-          
+
       - name: Upload Logs for Deployment
         if: always()
         run: |
