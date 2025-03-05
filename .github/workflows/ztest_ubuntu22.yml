@@ -19,75 +19,59 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      # Step to check and update Zephyr if needed
-      - name: Initialize Zephyr project (if not already initialized)
+      - name: Clean up previous test directory (keep .west)
         run: |
-          echo "Checking if Zephyr project is already initialized..."
+          echo "Cleaning up previous test artifacts..."
           
           # Define workspace directory
           WORK_DIR=$PWD
-          WEST_DIR="$WORK_DIR/nucleof429zi_cicd/.west"
       
-          # Only run west init if the .west directory does not exist
-          if [ ! -d "$WEST_DIR" ]; then
-            echo "Initializing Zephyr project..."
-            west init -l nucleof429zi_cicd --mf west.yml
-          else
-            echo "Zephyr project already initialized, skipping initialization."
-          fi
-      
-          # Run west update after initialization
-          echo "Updating Zephyr project..."
-          west update -o=--depth=1 -n
+          # Remove all files and directories in the workspace, except .west
+          echo "Cleaning up workspace but keeping .west..."
+          find "$WORK_DIR" -mindepth 1 -not -name '.west' -exec rm -rf {} +
 
-      # Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           path: nucleof429zi_cicd
 
-      # Set up Python environment
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      # Setup Zephyr toolchain
       - name: Setup Zephyr project
         uses: zephyrproject-rtos/action-zephyr-setup@v1
         with:
           app-path: nucleof429zi_cicd
           toolchains: arm-zephyr-eabi
 
-      # Build firmware
       - name: Build firmware
         working-directory: nucleof429zi_cicd
         shell: bash
         run: |
-          TWISTER_OUT="$PWD/twister-out"
+          TWISTER_OUT=$PWD/twister-out
           mkdir -p "$TWISTER_OUT"
 
           EXTRA_TWISTER_FLAGS="--short-build-path -O $TWISTER_OUT"
           west twister -T app -v --inline-logs --integration $EXTRA_TWISTER_FLAGS
 
-      # Run Twister tests
       - name: Run Twister Tests
         working-directory: nucleof429zi_cicd
         shell: bash
         run: |
-          TWISTER_OUT="$PWD/twister-out"
+          TWISTER_OUT=$PWD/twister-out
+          mkdir -p "$TWISTER_OUT"
 
           EXTRA_TWISTER_FLAGS="--verbose --short-build-path -O $TWISTER_OUT"
           west twister -T tests -v --inline-logs --integration $EXTRA_TWISTER_FLAGS
 
-      # Check Twister Output Files
       - name: Check Twister Output Files
         run: |
-          TWISTER_OUT="$PWD/twister-out"
+          TWISTER_OUT=$PWD/twister-out
           echo "Listing twister-out directory:"
           ls -R "$TWISTER_OUT" || echo "No output found"
 
-      # Upload Twister test results
       - name: Upload Twister Test Results
         if: always()
         uses: actions/upload-artifact@v4
@@ -95,12 +79,11 @@ jobs:
           name: twister-test-results-${{ matrix.os }}
           path: $PWD/twister-out/**/*
           
-      # Upload logs for deployment
       - name: Upload Logs for Deployment
         if: always()
         run: |
-          DEPLOY_DIR="$PWD/deploy/logs"
-          TWISTER_OUT="$PWD/twister-out"
+          DEPLOY_DIR=$PWD/deploy/logs
+          TWISTER_OUT=$PWD/twister-out
           mkdir -p "$DEPLOY_DIR"
 
           if [ -d "$TWISTER_OUT" ]; then
