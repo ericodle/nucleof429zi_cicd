@@ -13,8 +13,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ninja-build \
     wget \
     xz-utils \
-  && apt-get clean \
-  && rm -rf /var/lib/apt/lists/*
+    build-essential && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Zephyr SDK
 RUN export sdk_file_name="zephyr-sdk-${ZEPHYR_SDK_VERSION}_linux-$(uname -m)_minimal.tar.xz" \
@@ -23,6 +22,10 @@ RUN export sdk_file_name="zephyr-sdk-${ZEPHYR_SDK_VERSION}_linux-$(uname -m)_min
   && tar -xvf ${sdk_file_name} -C ${ZEPHYR_SDK_INSTALL_DIR} --strip-components=1 \
   && ${ZEPHYR_SDK_INSTALL_DIR}/setup.sh -c ${ZEPHYR_SDK_TOOLCHAINS} \
   && rm ${sdk_file_name}
+
+# Set Zephyr SDK path
+ENV ZEPHYR_TOOLCHAIN_VARIANT=zephyr
+ENV ZEPHYR_SDK_INSTALL_DIR=/opt/toolchains/zephyr-sdk-${ZEPHYR_SDK_VERSION}
 
 # Python
 ENV VIRTUAL_ENV=/opt/venv
@@ -36,3 +39,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Install West using the pip from the virtual environment
 RUN $VIRTUAL_ENV/bin/pip install --no-cache-dir wheel west
+
+# Copy source code (example)
+COPY ./app/src /app/src
