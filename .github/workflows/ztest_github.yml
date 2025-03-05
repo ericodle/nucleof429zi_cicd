@@ -47,7 +47,7 @@ jobs:
         shell: bash
         run: |
           EXTRA_TWISTER_FLAGS="--verbose --short-build-path -O /tmp/twister-out"
-          west twister --all $EXTRA_TWISTER_FLAGS
+          west twister -T tests -v --inline-logs --integration $EXTRA_TWISTER_FLAGS
 
       - name: Check Twister Output Files
         run: |
