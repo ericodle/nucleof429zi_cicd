@@ -40,14 +40,14 @@ jobs:
         shell: bash
         run: |
           EXTRA_TWISTER_FLAGS="--short-build-path -O /tmp/twister-out"
-          west twister -T app -v --inline-logs
+          west twister -T app -v --inline-logs --integration $EXTRA_TWISTER_FLAGS
 
       - name: Run Twister Tests
         working-directory: nucleof429zi_cicd
         shell: bash
         run: |
           EXTRA_TWISTER_FLAGS="--verbose --short-build-path -O /tmp/twister-out"
-          west twister -T tests --inline-logs $EXTRA_TWISTER_FLAGS
+          west twister -T tests -v --inline-logs $EXTRA_TWISTER_FLAGS
 
       - name: Check Twister Output Files
         run: |
