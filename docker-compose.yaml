@@ -2,7 +2,7 @@ services:
   zephyr:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: ./test-containers/debian/Dockerfile
     container_name: nucleof429zi_cicd
     volumes:
       - .:/usr/src
