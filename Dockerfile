@@ -1,4 +1,5 @@
-FROM debian:stable-slim
+# Use Debian as the base image
+FROM debian:latest
 
 ARG ZEPHYR_SDK_VERSION=0.17.0
 ARG ZEPHYR_SDK_INSTALL_DIR=/opt/toolchains/zephyr-sdk-${ZEPHYR_SDK_VERSION}
@@ -13,7 +14,23 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ninja-build \
     wget \
     xz-utils \
-    build-essential && apt-get clean && rm -rf /var/lib/apt/lists/*
+    build-essential \
+    gcc \
+    g++ \
+    python3 \
+    python3-pip \
+    python3-venv \
+    python3-dev \
+    libc6-dev \
+    libnewlib-dev \
+    g++-multilib \
+    qemu-utils qemu-system-x86 qemu-system-gui \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Set up Python virtual environment
+ENV VIRTUAL_ENV=/opt/venv
+RUN python3 -m venv $VIRTUAL_ENV && \
+    $VIRTUAL_ENV/bin/pip install --no-cache-dir wheel west
 
 # Zephyr SDK
 RUN export sdk_file_name="zephyr-sdk-${ZEPHYR_SDK_VERSION}_linux-$(uname -m)_minimal.tar.xz" \
@@ -26,19 +43,14 @@ RUN export sdk_file_name="zephyr-sdk-${ZEPHYR_SDK_VERSION}_linux-$(uname -m)_min
 # Set Zephyr SDK path
 ENV ZEPHYR_TOOLCHAIN_VARIANT=zephyr
 ENV ZEPHYR_SDK_INSTALL_DIR=/opt/toolchains/zephyr-sdk-${ZEPHYR_SDK_VERSION}
+ENV PATH="${VIRTUAL_ENV}/bin:${PATH}"
 
-# Python
-ENV VIRTUAL_ENV=/opt/venv
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    python3 \
-    python3-pip \
-    python3-venv \
-  && python3 -m venv $VIRTUAL_ENV \
-  && apt-get clean \
-  && rm -rf /var/lib/apt/lists/*
+VOLUME /usr/src
+WORKDIR /usr/src
 
-# Install West using the pip from the virtual environment
-RUN $VIRTUAL_ENV/bin/pip install --no-cache-dir wheel west
+# Copy the entrypoint script and make it executable
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-# Copy source code (example)
-COPY ./app/src /app/src
+# Set the entrypoint
+ENTRYPOINT ["/entrypoint.sh"]
