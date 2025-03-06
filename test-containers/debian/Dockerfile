@@ -48,5 +48,10 @@ ENV PATH="${VIRTUAL_ENV}/bin:${PATH}"
 VOLUME /usr/src
 WORKDIR /usr/src
 
+# Copy the entrypoint script and make it executable
+COPY ./test-containers/debian/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 # Set the entrypoint
-ENTRYPOINT ["./test-containers/debian/entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
+

@@ -17,3 +17,6 @@ __pycache__/
 
 # my-workspace
 /my-workspace*
+
+# debian tests
+/debian-test*
