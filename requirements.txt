@@ -1,9 +1,0 @@
-natsort
-pyelftools
-junitparser
-pytest
-psutil
-tabulate
-pyserial
-anytree
-ply
