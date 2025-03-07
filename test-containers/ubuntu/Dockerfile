@@ -7,7 +7,6 @@ ARG ZEPHYR_SDK_TOOLCHAINS="-t arm-zephyr-eabi"
 
 # OS dependencies and packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    ca-certificates \
     cmake \
     device-tree-compiler \
     git \
@@ -24,7 +23,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libc6-dev \
     libnewlib-dev \
     g++-multilib \
-    qemu-utils qemu-system-x86 qemu-system-gui \
+    qemu-utils qemu-system-x86 qemu-system \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Set up Python virtual environment
