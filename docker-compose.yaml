@@ -24,3 +24,16 @@ services:
       - ZEPHYR_SDK_INSTALL_DIR=/opt/toolchains/zephyr-sdk-0.17.0
     stdin_open: true
     tty: true
+  zephyr-ubuntu:
+    build:
+      context: .
+      dockerfile: ./test-containers/ubuntu/Dockerfile
+    container_name: nucleof429zi_cicd_ubuntu
+    volumes:
+      - .:/usr/src
+    environment:
+      - ZEPHYR_SDK_VERSION=0.17.0
+      - ZEPHYR_SDK_INSTALL_DIR=/opt/toolchains/zephyr-sdk-0.17.0
+    stdin_open: true
+    tty: true
+

@@ -23,3 +23,6 @@ __pycache__/
 
 # arch tests
 /arch-test*
+
+# ubuntu tests
+/ubuntu-test*
