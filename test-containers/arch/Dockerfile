@@ -1,5 +1,5 @@
 # Use Debian as the base image
-FROM debian:latest
+FROM archlinux
 
 ARG ZEPHYR_SDK_VERSION=0.17.0
 ARG ZEPHYR_SDK_INSTALL_DIR=/opt/toolchains/zephyr-sdk-${ZEPHYR_SDK_VERSION}
@@ -49,7 +49,7 @@ VOLUME /usr/src
 WORKDIR /usr/src
 
 # Copy the entrypoint script and make it executable
-COPY ./test-containers/debian/entrypoint.sh /entrypoint.sh
+COPY ./test-containers/arch/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 # Set the entrypoint

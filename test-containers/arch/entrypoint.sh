@@ -5,12 +5,12 @@ set -e  # Exit immediately if a command fails
 source /opt/venv/bin/activate
 
 # Initialize the West workspace only if it hasn't been initialized yet
-if [ ! -d "debian-test" ]; then
-    west init -m https://github.com/ericodle/nucleof429zi_cicd --mr main debian-test
+if [ ! -d "arch-test" ]; then
+    west init -m https://github.com/ericodle/nucleof429zi_cicd --mr main arch-test
 fi
 
 # Update West
-cd debian-test
+cd arch-test
 west update
 
 # Install required Python packages
