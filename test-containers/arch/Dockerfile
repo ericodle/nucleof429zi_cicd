@@ -1,35 +1,32 @@
-# Use Debian as the base image
+# Use Arch Linux as the base image
 FROM archlinux
 
 ARG ZEPHYR_SDK_VERSION=0.17.0
 ARG ZEPHYR_SDK_INSTALL_DIR=/opt/toolchains/zephyr-sdk-${ZEPHYR_SDK_VERSION}
 ARG ZEPHYR_SDK_TOOLCHAINS="-t arm-zephyr-eabi"
 
-# OS dependencies and packages
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    ca-certificates \
+# Update system and install required dependencies
+RUN pacman -Syu --noconfirm \
+    base-devel \
     cmake \
-    device-tree-compiler \
+    dtc \  
     git \
-    ninja-build \
+    ninja \
     wget \
-    xz-utils \
-    build-essential \
+    xz \
+    python \
+    python-pip \
+    python-virtualenv \
+    python-setuptools \
     gcc \
-    g++ \
-    python3 \
-    python3-pip \
-    python3-venv \
-    python3-dev \
-    libc6-dev \
-    libnewlib-dev \
-    g++-multilib \
-    qemu-utils qemu-system-x86 qemu-system-gui \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+    gcc-libs \
+    qemu-system-x86 \
+    qemu-system-arm \
+    && pacman -Scc --noconfirm  # Clean package cache
 
 # Set up Python virtual environment
 ENV VIRTUAL_ENV=/opt/venv
-RUN python3 -m venv $VIRTUAL_ENV && \
+RUN python -m venv $VIRTUAL_ENV && \
     $VIRTUAL_ENV/bin/pip install --no-cache-dir wheel west
 
 # Zephyr SDK
@@ -54,4 +51,3 @@ RUN chmod +x /entrypoint.sh
 
 # Set the entrypoint
 ENTRYPOINT ["/entrypoint.sh"]
-

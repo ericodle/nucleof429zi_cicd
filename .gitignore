@@ -20,3 +20,6 @@ __pycache__/
 
 # debian tests
 /debian-test*
+
+# arch tests
+/arch-test*
