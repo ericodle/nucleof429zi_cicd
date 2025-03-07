@@ -8,6 +8,9 @@ ARG ZEPHYR_SDK_TOOLCHAINS="-t arm-zephyr-eabi"
 # Update system and install required dependencies
 RUN pacman -Syu --noconfirm \
     base-devel \
+    lib32-glibc \
+    lib32-gcc-libs \
+    gcc-multilib \
     cmake \
     dtc \  
     git \
