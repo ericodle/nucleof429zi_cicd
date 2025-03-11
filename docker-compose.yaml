@@ -1,9 +1,9 @@
 services:
-  zephyr-debian:
+  debian-test-image:
     build:
       context: .
       dockerfile: ./test-containers/debian/Dockerfile
-    container_name: nucleof429zi_cicd_debian
+    container_name: debian-test-container
     volumes:
       - .:/usr/src
     environment:
@@ -12,23 +12,11 @@ services:
     stdin_open: true
     tty: true
 
-  zephyr-arch:
-    build:
-      context: .
-      dockerfile: ./test-containers/arch/Dockerfile
-    container_name: nucleof429zi_cicd_arch
-    volumes:
-      - .:/usr/src
-    environment:
-      - ZEPHYR_SDK_VERSION=0.17.0
-      - ZEPHYR_SDK_INSTALL_DIR=/opt/toolchains/zephyr-sdk-0.17.0
-    stdin_open: true
-    tty: true
-  zephyr-ubuntu:
+  ubuntu-test-image:
     build:
       context: .
       dockerfile: ./test-containers/ubuntu/Dockerfile
-    container_name: nucleof429zi_cicd_ubuntu
+    container_name: ubuntu-test-container
     volumes:
       - .:/usr/src
     environment:
@@ -36,4 +24,16 @@ services:
       - ZEPHYR_SDK_INSTALL_DIR=/opt/toolchains/zephyr-sdk-0.17.0
     stdin_open: true
     tty: true
-
+    
+  arch-test-image:
+    build:
+      context: .
+      dockerfile: ./test-containers/arch/Dockerfile
+    container_name: arch-test-container
+    volumes:
+      - .:/usr/src
+    environment:
+      - ZEPHYR_SDK_VERSION=0.17.0
+      - ZEPHYR_SDK_INSTALL_DIR=/opt/toolchains/zephyr-sdk-0.17.0
+    stdin_open: true
+    tty: true
