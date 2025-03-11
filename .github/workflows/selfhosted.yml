@@ -10,7 +10,7 @@ on:
 
 jobs:
   self-hosted-runner:
-    runs-on: [self-hosted, eo-Precision-5820-Tower]  
+    runs-on: self-hosted
 
     steps:
       - name: Checkout repository
