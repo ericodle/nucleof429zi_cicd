@@ -7,7 +7,6 @@ ARG ZEPHYR_SDK_TOOLCHAINS="-t arm-zephyr-eabi"
 
 # OS dependencies and packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    ca-certificates \
     cmake \
     device-tree-compiler \
     git \

@@ -22,5 +22,7 @@ cd nucleof429zi_cicd
 # Run the tests
 west twister -T tests --verbose --integration
 
-# Keep the container running (optional)
-exec "$@"
+# Save test results to a persistent folder
+timestamp=$(date +"%Y-%m-%d_%H-%M-%S")
+mkdir -p /test_results/ubuntu_latest/$timestamp
+cp -r twister-out /test_results/ubuntu_latest/$timestamp/
