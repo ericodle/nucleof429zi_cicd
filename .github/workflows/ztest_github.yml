@@ -1,4 +1,4 @@
-name: ZTests Run on GitHub
+name: GitHub-hosted ztests
 
 on:
   push:
