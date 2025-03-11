@@ -35,38 +35,33 @@ jobs:
           app-path: nucleof429zi_cicd
           toolchains: arm-zephyr-eabi
 
+      - name: Generate Timestamped Folder Name
+        run: echo "TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S')" >> $GITHUB_ENV
+
+      - name: Ensure Twister Output Directory Exists
+        run: mkdir -p ${{ github.workspace }}/github-hosted-twister-out/${{ env.TIMESTAMP }}
+
       - name: Build firmware
         working-directory: nucleof429zi_cicd
         shell: bash
         run: |
-          EXTRA_TWISTER_FLAGS="--short-build-path -O /tmp/twister-out"
+          EXTRA_TWISTER_FLAGS="--short-build-path -O ${{ github.workspace }}/github-hosted-twister-out/${{ env.TIMESTAMP }}"
           west twister -T app -v --inline-logs --integration $EXTRA_TWISTER_FLAGS
-
+      
       - name: Run Twister Tests
         working-directory: nucleof429zi_cicd
         shell: bash
         run: |
-          EXTRA_TWISTER_FLAGS="--verbose --short-build-path -O /tmp/twister-out"
+          EXTRA_TWISTER_FLAGS="--verbose --short-build-path -O ${{ github.workspace }}/github-hosted-twister-out/${{ env.TIMESTAMP }}"
           west twister -T tests -v --inline-logs --integration $EXTRA_TWISTER_FLAGS
 
-      - name: Check Twister Output Files
-        run: |
-          echo "Listing twister-out directory:"
-          ls -R /tmp/twister-out || echo "No output found"
+      - name: Compress Twister Output (Optional)
+        run: tar -czf ${{ github.workspace }}/github-hosted-twister-out-${{ env.TIMESTAMP }}.tar.gz -C ${{ github.workspace }}/github-hosted-twister-out/${{ env.TIMESTAMP }} .
 
-      - name: Upload Twister Test Results
+      - name: Upload Compressed Twister Test Results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: twister-test-results-${{ matrix.os }}
-          path: /tmp/twister-out/**/*
-          
-      - name: Upload Logs for Deployment
-        if: always()
-        run: |
-          mkdir -p deploy/logs
-          if [ -d "/tmp/twister-out" ]; then
-            mv /tmp/twister-out deploy/logs/
-          else
-            echo "No Twister output to move"
-          fi
+          name: twister-test-results-${{ matrix.os }}-${{ env.TIMESTAMP }}
+          path: ${{ github.workspace }}/github-hosted-twister-out-${{ env.TIMESTAMP }}.tar.gz
+          retention-days: 7
