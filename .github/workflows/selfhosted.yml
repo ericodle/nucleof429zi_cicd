@@ -1,4 +1,4 @@
-name: Docker Self-hosted Runner
+name: Self-hosted runner -- Ubuntu latest
 
 on:
   push:
@@ -22,7 +22,3 @@ jobs:
       - name: Build and start container with docker-compose
         run: |
           docker compose up --build ubuntu-test-image
-
-      - name: Wait for the container to start
-        run: |
-          sleep 10 
