@@ -21,6 +21,3 @@ cd nucleof429zi_cicd
 
 # Run the tests
 west twister -T tests --verbose --integration
-
-# Keep the container running (optional)
-exec "$@"

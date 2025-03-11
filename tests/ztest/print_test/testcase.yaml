@@ -2,7 +2,6 @@ tests:
   ztest.print_test:
     build_only: false
     platform_allow:
-      - native_posix
       - native_sim
     integration_platforms:
       - native_sim
