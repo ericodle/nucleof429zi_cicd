@@ -39,29 +39,29 @@ jobs:
         run: echo "TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S')" >> $GITHUB_ENV
 
       - name: Ensure Twister Output Directory Exists
-        run: mkdir -p ${{ github.workspace }}/github-hosted-twister-out/${{ env.TIMESTAMP }}
+        run: mkdir -p ${{ github.workspace }}/${{ env.TIMESTAMP }}
 
       - name: Build firmware
         working-directory: nucleof429zi_cicd
         shell: bash
         run: |
-          EXTRA_TWISTER_FLAGS="--short-build-path -O ${{ github.workspace }}/github-hosted-twister-out/${{ env.TIMESTAMP }}"
+          EXTRA_TWISTER_FLAGS="--short-build-path -O ${{ github.workspace }}/${{ env.TIMESTAMP }}"
           west twister -T app -v --inline-logs --integration $EXTRA_TWISTER_FLAGS
       
       - name: Run Twister Tests
         working-directory: nucleof429zi_cicd
         shell: bash
         run: |
-          EXTRA_TWISTER_FLAGS="--verbose --short-build-path -O ${{ github.workspace }}/github-hosted-twister-out/${{ env.TIMESTAMP }}"
+          EXTRA_TWISTER_FLAGS="--verbose --short-build-path -O ${{ github.workspace }}/${{ env.TIMESTAMP }}"
           west twister -T tests -v --inline-logs --integration $EXTRA_TWISTER_FLAGS
 
       - name: Compress Twister Output (Optional)
-        run: tar -czf ${{ github.workspace }}/github-hosted-twister-out-${{ env.TIMESTAMP }}.tar.gz -C ${{ github.workspace }}/github-hosted-twister-out/${{ env.TIMESTAMP }} .
+        run: tar -czf ${{ github.workspace }}/${{ env.TIMESTAMP }}.tar.gz -C ${{ github.workspace }}/${{ env.TIMESTAMP }} .
 
       - name: Upload Compressed Twister Test Results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: twister-test-results-${{ matrix.os }}-${{ env.TIMESTAMP }}
-          path: ${{ github.workspace }}/github-hosted-twister-out-${{ env.TIMESTAMP }}.tar.gz
+          path: ${{ github.workspace }}/${{ env.TIMESTAMP }}.tar.gz
           retention-days: 7
