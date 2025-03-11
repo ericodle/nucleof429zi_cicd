@@ -1,4 +1,4 @@
-name: Self-hosted runner -- Ubuntu latest
+name: Self-hosted runner -- Arch
 
 on:
   push:

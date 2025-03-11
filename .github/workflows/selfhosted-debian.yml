@@ -1,4 +1,4 @@
-name: Self-hosted runner -- Ubuntu latest
+name: Self-hosted runner -- Debian latest
 
 on:
   push:
