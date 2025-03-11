@@ -10,9 +10,9 @@ environment. Follow the official
 ## Run test containers
 
 ```shell
-`docker compose up --build debian-test-image`
-`docker compose up --build ubuntu-test-image`
-`docker compose up --build arch-test-image`
+docker compose up --build debian-test-image
+docker compose up --build ubuntu-test-image
+docker compose up --build arch-test-image
 ```
 
 ## Quick Setup
