@@ -4,7 +4,7 @@ This is an educational repository for me to learn how to integrate GitHub Action
 ## Zephyr Setup
 
 Before getting started, make sure you have a proper Zephyr development
-environment. Follow the official
+environment. 
 [Zephyr Getting Started Guide](https://docs.zephyrproject.org/latest/getting_started/index.html).
 
 ## Self-Hosted Containerized Tests
