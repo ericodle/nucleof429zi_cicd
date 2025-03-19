@@ -12,13 +12,7 @@ jobs:
   self-hosted-runner:
     runs-on: self-hosted
 
-    steps:
-      - name: Cleanup repository before checkout
-        run: |
-          rm -rf $GITHUB_WORKSPACE/* || true
-          chown -R $USER:$USER $GITHUB_WORKSPACE
-          chmod -R u+rwX $GITHUB_WORKSPACE
-          
+    steps:          
       - name: Checkout repository
         uses: actions/checkout@v4
 
