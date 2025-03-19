@@ -22,7 +22,3 @@ cd nucleof429zi_cicd
 # Run the tests
 west twister -T tests --verbose --integration
 
-# Save test results to a persistent folder
-timestamp=$(date +"%Y-%m-%d_%H-%M-%S")
-mkdir -p /test_results/arch_latest/$timestamp
-cp -r twister-out /test_results/arch_latest/$timestamp/
