@@ -9,7 +9,7 @@ environment.
 
 ## Self-Hosted Containerized Tests
 
-Just push to main!
+Just push to main! Actions are set to run on push.
 
 ## Run test containers
 
