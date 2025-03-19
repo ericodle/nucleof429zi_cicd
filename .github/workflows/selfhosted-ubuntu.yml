@@ -15,9 +15,9 @@ jobs:
     steps:
       - name: Cleanup repository before checkout
         run: |
-          sudo rm -rf $GITHUB_WORKSPACE/* || true
-          sudo chown -R $USER:$USER $GITHUB_WORKSPACE
-          sudo chmod -R u+rwX $GITHUB_WORKSPACE
+          rm -rf $GITHUB_WORKSPACE/* || true
+          chown -R $USER:$USER $GITHUB_WORKSPACE
+          chmod -R u+rwX $GITHUB_WORKSPACE
 
       - name: Checkout repository
         uses: actions/checkout@v4
