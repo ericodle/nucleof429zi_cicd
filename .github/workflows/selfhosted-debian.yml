@@ -1,4 +1,4 @@
-name: Self-hosted runner -- Ubuntu latest
+name: Self-hosted runner -- Debian latest
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
 
 jobs:
   self-hosted-runner:
-    runs-on: [self-hosted, ubuntu-runner]
+    runs-on: [self-hosted, debian-runner]
 
     steps:
       - name: Checkout repository
