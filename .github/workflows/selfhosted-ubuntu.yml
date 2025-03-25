@@ -16,24 +16,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Docker
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build and start containers with Docker Compose
-        run: |
-          docker-compose -f ./docker-compose.yml up --build -d  # Builds and starts the container in detached mode
-
       - name: Wait for the container to be ready
         run: |
           sleep 30  # Sleep to ensure the runner has enough time to start
 
-      - name: Run GitHub Action on the self-hosted runner
+      - name: Twister tests
         run: |
           # Download and install GitHub actions runner inside the container
-          curl -s https://github.com/actions/runner/releases/download/v2.323.0/actions-runner-linux-x64-2.323.0.tar.gz | tar -xzf -
-          
-          # Configure the runner with the appropriate repository and token
-          ./config.sh --url https://github.com/${{ github.repository }} --token ${{ secrets.RUNNER_TOKEN }}
-          
-          # Start the runner inside the container
-          ./run.sh
+          west twister -T tests --verbose --integration
