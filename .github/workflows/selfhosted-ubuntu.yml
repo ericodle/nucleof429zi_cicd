@@ -18,5 +18,12 @@ jobs:
 
       - name: Run Twister tests
         run: |
-          # Download and install GitHub actions runner inside the container
-          west twister -T tests --verbose --integration
+          mkdir -p twister_results
+          west twister -T tests --verbose --integration --outdir twister_results
+
+      - name: Upload Twister test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: twister-test-results
+          path: twister_results/
+          retention-days: 7
