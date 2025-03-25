@@ -16,11 +16,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Wait for the container to be ready
-        run: |
-          sleep 30  # Sleep to ensure the runner has enough time to start
-
-      - name: Twister tests
+      - name: Run Twister tests
         run: |
           # Download and install GitHub actions runner inside the container
           west twister -T tests --verbose --integration
