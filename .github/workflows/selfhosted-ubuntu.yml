@@ -18,10 +18,8 @@ jobs:
       - name: Start Docker container
         run: docker compose up -d
 
-      - name: Run Twister tests
-        run: |
-          mkdir -p twister_results
-          west twister -T tests --verbose --integration --outdir twister_results
+      - name: Show running containers
+        run: docker ps -a
 
       - name: Show current working directory
         run: |
@@ -32,10 +30,17 @@ jobs:
         run: |
           echo "Listing files in the current directory:"
           ls -l  # List the files in the current working directory
-          
+
+      - name: Run Twister tests inside the container
+        run: |
+          docker compose exec ubuntu bash -c "
+          mkdir -p /home/gha/twister_results &&
+          source /opt/venv/bin/activate &&
+          west twister -T tests --verbose --integration --outdir /home/gha/twister_results"
+      
       - name: Upload Twister test results
         uses: actions/upload-artifact@v4
         with:
           name: twister-test-results
-          path: twister_results/
+          path: /home/gha/twister_results/
           retention-days: 7
