@@ -15,6 +15,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Verify Docker Compose
+        run: docker compose version 
+
       - name: Start Docker container
         run: docker compose up -d
 
