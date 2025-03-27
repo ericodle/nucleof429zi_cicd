@@ -1,4 +1,4 @@
-name: Run Twister tests in Docker container
+name: Self-hosted runner -- Ubuntu latest
 
 on:
   push:
@@ -9,28 +9,12 @@ on:
       - main
 
 jobs:
-  run-twister-tests:
-    runs-on: ubuntu-latest
-
+  self-hosted-runner:
+    runs-on: [self-hosted, ubuntu-runner]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Ensure Docker container is running
+      - name: Start Docker container
         run: |
-          # Start the container if it's not already running
-          docker compose up -d
-
-      - name: Execute Twister tests inside the Docker container
-        run: |
-          docker compose exec ubuntu bash -c "
-            mkdir -p twister_results && \
-            west twister -T tests --verbose --integration --outdir twister_results
-          "
-
-      - name: Upload Twister test results
-        uses: actions/upload-artifact@v4
-        with:
-          name: twister-test-results
-          path: twister_results/
-          retention-days: 7
+          docker compose -f docker-compose.yml up -d
