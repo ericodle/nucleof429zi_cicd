@@ -18,9 +18,6 @@ jobs:
       - name: Start Docker container
         run: docker compose up -d
 
-      - name: Verify running containers
-        run: docker ps -a  # Debugging step to check if the container is running
-
       - name: Run tests inside container
         run: docker compose exec ubuntu bash -c "/entrypoint.sh"
 
