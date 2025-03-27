@@ -11,8 +11,6 @@ on:
 jobs:
   self-hosted-runner:
     runs-on: [self-hosted, ubuntu-runner]
-    container:
-      image: ubuntu_container
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
