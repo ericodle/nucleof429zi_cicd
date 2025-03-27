@@ -37,9 +37,6 @@ jobs:
               west init -m https://github.com/ericodle/nucleof429zi_cicd
           fi
 
-      - name: Update West
-        run: west update
-
       - name: Change to test directory
         run: cd nucleof429zi_cicd
 
