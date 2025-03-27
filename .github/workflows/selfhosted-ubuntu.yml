@@ -24,6 +24,9 @@ jobs:
 
       - name: Run Twister Tests
         run: |
+          # Activate the virtual environment
+          source /opt/venv/bin/activate
+
           # Create results directory with proper permissions
           mkdir -p /home/gha/twister_results
 
