@@ -15,6 +15,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Start Docker container
+      - name: Show current working directory
         run: |
-          docker compose -f docker-compose.yml up -d
+          echo "Current working directory:"
+          pwd  # Show the current working directory
+
+      - name: List files in current directory
+        run: |
+          echo "Listing files in the current directory:"
+          ls -l  # List the files in the current working directory
