@@ -15,37 +15,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Zephyr workspace and run Twister tests
+      - name: Debugging current working directory and contents
         run: |
-          # Ensure we are in the correct directory
-          cd /actions-runner/_work/nucleof429zi_cicd/nucleof429zi_cicd
-
-          # Activate the virtual environment
-          source /opt/venv/bin/activate
-
-          # Debug: Check if west is installed and available
-          echo "Checking west version..."
-          west --version
-
-          # Initialize the West workspace if not already initialized
-          if [ ! -d ".west" ]; then
-            echo "Initializing west workspace..."
-            west init -m https://github.com/ericodle/nucleof429zi_cicd
-          else
-            echo "West workspace already initialized."
-          fi
-
-          # Update West to make sure it's up to date
-          echo "Updating west..."
-          west update
-
-          # Verify if Twister is available
-          echo "Checking if twister command is available..."
-          west twister --help
-
-          # Create results directory with proper permissions
-          mkdir -p /home/gha/twister_results
-
-          # Run Twister tests
-          echo "Running Twister tests..."
-          west twister -T tests --verbose --integration --outdir twister_results
+          echo "Current working directory:"
+          pwd
+          echo "Contents of the current directory:"
+          ls -la
