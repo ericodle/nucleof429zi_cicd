@@ -15,18 +15,21 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Debugging current working directory and contents
-        run: |
-          echo "Current working directory:"
-          pwd
-          echo "Contents of the current directory:"
-          ls -la
-
-      - name: Run Twister Tests
+      - name: Set up Zephyr workspace
         run: |
           # Activate the virtual environment
           source /opt/venv/bin/activate
 
+          # Initialize the West workspace if not already initialized
+          if [ ! -d ".west" ]; then
+            west init -m https://github.com/ericodle/nucleof429zi_cicd
+          fi
+
+          # Update West
+          west update
+
+      - name: Run Twister Tests
+        run: |
           # Create results directory with proper permissions
           mkdir -p /home/gha/twister_results
 
