@@ -18,6 +18,11 @@ jobs:
       - name: Start Docker container
         run: docker compose up -d
 
+      - name: Run Twister tests
+        run: |
+          mkdir -p twister_results
+          west twister -T tests --verbose --integration --outdir twister_results
+
       - name: Show current working directory
         run: |
           echo "Current working directory:"
