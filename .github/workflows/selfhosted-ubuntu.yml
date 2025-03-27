@@ -15,29 +15,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Start Docker container
-        run: docker compose up -d
-
       - name: Show running containers
         run: docker ps -a
 
-      - name: Show current working directory
-        run: |
-          echo "Current working directory:"
-          pwd  # Show the current working directory
+      - name: Run Twister tests inside the running container
+        run: docker compose exec ubuntu bash -c "west twister -T tests --verbose --integration --outdir /home/gha/twister_results"
 
-      - name: List files in current directory
-        run: |
-          echo "Listing files in the current directory:"
-          ls -l  # List the files in the current working directory
+      - name: Show test result files inside the container
+        run: docker compose exec ubuntu ls -l /home/gha/twister_results/
 
-      - name: Run Twister tests inside the container
-        run: |
-          docker compose exec ubuntu bash -c "
-          mkdir -p /home/gha/twister_results &&
-          source /opt/venv/bin/activate &&
-          west twister -T tests --verbose --integration --outdir /home/gha/twister_results"
-      
       - name: Upload Twister test results
         uses: actions/upload-artifact@v4
         with:
