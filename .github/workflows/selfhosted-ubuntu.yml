@@ -15,9 +15,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Start Docker container
-        run: docker compose up -d
-
       - name: Run tests inside container
         run: docker compose exec ubuntu bash -c "/entrypoint.sh"
 
