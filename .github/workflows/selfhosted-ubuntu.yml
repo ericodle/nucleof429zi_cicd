@@ -1,4 +1,4 @@
-name: Self-hosted runner -- Ubuntu latest
+name: Run Twister Tests
 
 on:
   push:
@@ -9,8 +9,9 @@ on:
       - main
 
 jobs:
-  self-hosted-runner:
+  run-twister-tests:
     runs-on: [self-hosted, ubuntu-runner]
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -22,3 +23,28 @@ jobs:
           echo "Contents of the current directory:"
           ls -la
 
+      - name: Set up Python environment
+        run: |
+          python -m venv /opt/venv
+          source /opt/venv/bin/activate
+
+      - name: Switch to home directory
+        run: cd /home/gha
+
+      - name: Initialize West workspace
+        run: |
+          if [ ! -d ".west" ]; then
+              west init -m https://github.com/ericodle/nucleof429zi_cicd
+          fi
+
+      - name: Update West
+        run: west update
+
+      - name: Change to test directory
+        run: cd nucleof429zi_cicd
+
+      - name: Create results directory
+        run: mkdir -p /home/gha/twister_results
+
+      - name: Run Twister tests
+        run: west twister -T tests --verbose --integration --outdir twister_results
