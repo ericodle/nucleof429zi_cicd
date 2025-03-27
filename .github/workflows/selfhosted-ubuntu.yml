@@ -20,8 +20,5 @@ jobs:
           echo "Current working directory:"
           pwd  # Show the current working directory
 
-      - name: List files in current directory
-        run: |
-          echo "Listing files in the current directory:"
-          ls -l  # List the files in the current working directory
-          
+      - name: Start Docker container
+        run: docker compose up -d
