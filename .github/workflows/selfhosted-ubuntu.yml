@@ -1,4 +1,4 @@
-name: Run Twister Tests
+name: Run Twister Tests - Ubuntu tests
 
 on:
   push:
@@ -31,15 +31,29 @@ jobs:
       - name: Switch to home directory
         run: cd /home/gha
 
+      - name: Initialize West workspace
+        run: |
+          if [ ! -d ".west" ]; then
+              west init -m https://github.com/ericodle/nucleof429zi_cicd
+          fi
+
+      - name: Install Twister extension for West
+        run: |
+          west update
+          pip install west_twister
+
+      - name: Update West
+        run: west update
+
+      - name: Install required Python packages
+        run: |
+          pip install --no-cache-dir natsort pyelftools junitparser pytest psutil tabulate pyserial anytree ply
+
+      - name: Change to test directory
+        run: cd nucleof429zi_cicd
+
       - name: Create results directory
         run: mkdir -p /home/gha/twister_results
 
       - name: Run Twister tests
-        run: west init
-
-      - name: Debugging current working directory and contents
-        run: |
-          echo "Current working directory:"
-          pwd
-          echo "Contents of the current directory:"
-          ls -la
+        run: west twister -T tests --verbose --integration --outdir twister_results
