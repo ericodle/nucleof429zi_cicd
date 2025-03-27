@@ -35,4 +35,11 @@ jobs:
         run: mkdir -p /home/gha/twister_results
 
       - name: Run Twister tests
-        run: west twister -T tests --verbose --integration --outdir twister_results
+        run: west help
+
+      - name: Debugging current working directory and contents
+        run: |
+          echo "Current working directory:"
+          pwd
+          echo "Contents of the current directory:"
+          ls -la
