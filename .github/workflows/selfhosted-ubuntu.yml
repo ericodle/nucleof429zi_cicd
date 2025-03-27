@@ -1,4 +1,4 @@
-name: Run Twister Tests - Ubuntu tests
+name: Self-hosted runner -- Ubuntu latest
 
 on:
   push:
@@ -9,9 +9,8 @@ on:
       - main
 
 jobs:
-  run-twister-tests:
-    runs-on: [self-hosted, ubuntu-runner]
-
+  self-hosted-runner:
+    runs-on: [self-hosted, debian-runner]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -23,37 +22,15 @@ jobs:
           echo "Contents of the current directory:"
           ls -la
 
-      - name: Set up Python environment
-        run: |
-          python -m venv /opt/venv
-          source /opt/venv/bin/activate
+      - name: Start Docker container
+        run: docker compose up -d
 
-      - name: Switch to home directory
-        run: cd /home/gha
+      - name: Run tests inside container
+        run: docker compose exec debian bash -c "/entrypoint.sh"
 
-      - name: Initialize West workspace
-        run: |
-          if [ ! -d ".west" ]; then
-              west init -m https://github.com/ericodle/nucleof429zi_cicd
-          fi
-
-      - name: Install Twister extension for West
-        run: |
-          west update
-          pip install west_twister
-
-      - name: Update West
-        run: west update
-
-      - name: Install required Python packages
-        run: |
-          pip install --no-cache-dir natsort pyelftools junitparser pytest psutil tabulate pyserial anytree ply
-
-      - name: Change to test directory
-        run: cd nucleof429zi_cicd
-
-      - name: Create results directory
-        run: mkdir -p /home/gha/twister_results
-
-      - name: Run Twister tests
-        run: west twister -T tests --verbose --integration --outdir twister_results
+      - name: Upload Twister test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: twister-test-results
+          path: /home/gha/twister_results/
+          retention-days: 7
