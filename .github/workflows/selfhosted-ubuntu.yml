@@ -15,14 +15,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Show running containers
-        run: docker ps -a
+      - name: Start Docker container
+        run: docker compose up -d
 
-      - name: Run Twister tests inside the running container
-        run: docker compose exec ubuntu bash -c "west twister -T tests --verbose --integration --outdir /home/gha/twister_results"
+      - name: Verify running containers
+        run: docker ps -a  # Debugging step to check if the container is running
 
-      - name: Show test result files inside the container
-        run: docker compose exec ubuntu ls -l /home/gha/twister_results/
+      - name: Run tests inside container
+        run: docker compose exec ubuntu bash -c "/entrypoint.sh"
 
       - name: Upload Twister test results
         uses: actions/upload-artifact@v4
