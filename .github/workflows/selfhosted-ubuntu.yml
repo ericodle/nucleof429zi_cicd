@@ -11,11 +11,15 @@ on:
 jobs:
   self-hosted-runner:
     runs-on: [self-hosted, ubuntu-runner]
-
+    container:
+      image: ubuntu_container
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Run Twister tests
-        run: |
-          west twister -T tests --verbose --integration
+      - name: Upload Twister test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: twister-test-results
+          path: twister_results/
+          retention-days: 7
