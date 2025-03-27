@@ -21,3 +21,11 @@ jobs:
           pwd
           echo "Contents of the current directory:"
           ls -la
+
+      - name: Run Twister Tests
+        run: |
+          # Create results directory with proper permissions
+          mkdir -p /home/gha/twister_results
+
+          # Run Twister tests
+          west twister -T tests --verbose --integration --outdir twister_results
