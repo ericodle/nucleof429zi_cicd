@@ -27,5 +27,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: twister-test-results
-          path: /home/gha/twister_results/
+          path: twister_results/
           retention-days: 7
