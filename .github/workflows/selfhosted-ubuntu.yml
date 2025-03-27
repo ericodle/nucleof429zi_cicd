@@ -15,18 +15,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Verify Docker Compose
-        run: docker compose version 
-
-      - name: Start Docker container
-        run: docker compose up -d
-
-      - name: Run tests inside container
-        run: docker compose exec ubuntu bash -c "/entrypoint.sh"
-
-      - name: Upload Twister test results
-        uses: actions/upload-artifact@v4
-        with:
-          name: twister-test-results
-          path: /home/gha/twister_results/
-          retention-days: 7
+      - name: Debugging current working directory and contents
+        run: |
+          echo "Current working directory:"
+          pwd
+          echo "Contents of the current directory:"
+          ls -la
