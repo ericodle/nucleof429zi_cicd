@@ -1,0 +1,29 @@
+name: Self-hosted runner -- Arch latest
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  self-hosted-runner:
+    runs-on: [self-hosted, arch-runner]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Start Docker container
+        run: docker compose up -d
+
+      - name: Run tests inside container
+        run: docker compose exec arch bash -c "/entrypoint.sh"
+
+      - name: Upload Twister test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: twister-test-results
+          path: /home/gha/twister_results/
+          retention-days: 7
