@@ -31,15 +31,6 @@ jobs:
       - name: Switch to home directory
         run: cd /home/gha
 
-      - name: Initialize West workspace
-        run: |
-          if [ ! -d ".west" ]; then
-              west init -m https://github.com/ericodle/nucleof429zi_cicd
-          fi
-
-      - name: Change to test directory
-        run: cd nucleof429zi_cicd
-
       - name: Create results directory
         run: mkdir -p /home/gha/twister_results
 
