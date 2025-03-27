@@ -22,15 +22,16 @@ jobs:
           echo "Contents of the current directory:"
           ls -la
 
-      - name: Start Docker container
-        run: docker compose up -d
+      - name: Set up West workspace
+        run: |
+          cd $HOME
+          if [ ! -d ".west" ]; then
+            west init -m https://github.com/ericodle/nucleof429zi_cicd
+          fi
+          west update
 
-      - name: Run tests inside container
-        run: docker compose exec debian bash -c "/entrypoint.sh"
-
-      - name: Upload Twister test results
-        uses: actions/upload-artifact@v4
-        with:
-          name: twister-test-results
-          path: /home/gha/twister_results/
-          retention-days: 7
+      - name: Run Twister tests
+        run: |
+          cd $HOME/nucleof429zi_cicd
+          mkdir -p $HOME/twister_results
+          west twister -T tests --verbose --integration --outdir $HOME/twister_results
