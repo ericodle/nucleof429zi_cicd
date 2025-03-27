@@ -7,18 +7,6 @@ Before getting started, make sure you have a proper Zephyr development
 environment. 
 [Zephyr Getting Started Guide](https://docs.zephyrproject.org/latest/getting_started/index.html).
 
-## Self-Hosted Containerized Tests
-
-Just push to main! Actions are set to run on push.
-
-## Run test containers
-
-```shell
-docker compose up --build debian-test-image
-docker compose up --build ubuntu-test-image
-docker compose up --build arch-test-image
-```
-
 ## Quick Setup
 
 ```shell
