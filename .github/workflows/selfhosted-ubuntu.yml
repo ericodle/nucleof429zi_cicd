@@ -35,7 +35,7 @@ jobs:
         run: mkdir -p /home/gha/twister_results
 
       - name: Run Twister tests
-        run: west help
+        run: west update
 
       - name: Debugging current working directory and contents
         run: |
