@@ -18,4 +18,4 @@ cd nucleof429zi_cicd
 west build -b nucleo_f429zi app
 west flash --runner openocd
 ```
-Good luck.
+Good luck!
