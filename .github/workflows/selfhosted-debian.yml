@@ -24,7 +24,6 @@ jobs:
 
       - name: Set up West workspace
         run: |
-          cd $HOME
           if [ ! -d ".west" ]; then
             west init -m https://github.com/ericodle/nucleof429zi_cicd
           fi
