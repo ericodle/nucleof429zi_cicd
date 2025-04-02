@@ -36,11 +36,7 @@ jobs:
           mkdir -p $HOME/twister_results
           west twister -T tests --verbose --integration --outdir $HOME/twister_results
 
-
-      - name: Upload Twister test results as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: twister-results
-          path: $(ls -d /home/gha/twister_results* | tail -n 1)/**
-          retention-days: 7
-          if-no-files-found: warn
+      - name: Debug Twister Results Directory
+        run: |
+          echo "Checking Twister results directories..."
+          ls -la /home/gha | grep twister_results || echo "No twister results directory found"
