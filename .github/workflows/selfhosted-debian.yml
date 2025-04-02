@@ -32,13 +32,17 @@ jobs:
 
       - name: Run Twister tests
         run: |
+          TEMP_DIR=$(mktemp -d)  # Create a temporary directory
+          echo "Using temp directory: $TEMP_DIR"
           cd $HOME/nucleof429zi_cicd
-          mkdir -p $HOME/twister_results
-          west twister -T tests --verbose --integration --outdir $HOME/twister_results
+          west twister -T tests --verbose --integration --outdir $TEMP_DIR
+
+          # Export TEMP_DIR as an environment variable for later steps
+          echo "TWISTER_RESULTS=$TEMP_DIR" >> $GITHUB_ENV
 
       - name: Upload Twister test results as artifact
         uses: actions/upload-artifact@v4
         with:
           name: twister-results
-          path: /home/gha/twister_results/**
+          path: ${{ env.TWISTER_RESULTS }}/**
           retention-days: 7
