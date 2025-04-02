@@ -10,7 +10,7 @@ on:
 
 jobs:
   self-hosted-runner:
-    runs-on: [self-hosted, debian-runner]
+    runs-on: [self-hosted, debian-runner, ubuntu-runner, arch-runner]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
